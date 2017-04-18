@@ -11,9 +11,17 @@ import tkinter
 class Controller:
     """Clase controlador."""
 
-    def __init__(self, model):
+    __window = None  # Tipo ventana y se crea vacío.
+    __height = 500
+    __width = 500
+    __title = "Título por Defecto"
+    __model = None  # Esto almacena la lógica de la aplicación
+
+    def __init__(self, width, height, title, model):
         """Constructor por defecto."""
         self.__window = tkinter.Tk()
+        self.__height = height
+        self.__width = width
         self.__model = model
 
     def initialize(self):
@@ -22,11 +30,20 @@ class Controller:
         Se utilizan parámetros por defecto para crear la ventana proncipal un,
         tamaño predefinido y un nombre de aplicación y un icono por defecto.
         """
-        self.__window.minsize(width=260, height=260)
+        # Aquí es donde tienes que poner la programación para que la ventana se
+        # centre en la pantalla.
 
-    def go(self):
+        self.__window.minsize(width=self.__width, height=self.__height)
+
+    def size(self, width, height):
+        """Asignación del tamaño de la ventana."""
+        self.__width = width
+        self.__height = height
+
+    def start(self):
         """Poner en funcionamiento la vista.
 
         Se utiliza para poder poner el loop proncipal de la aplicación andando.
         """
+        self.initialize()
         self.__window.mainloop()

@@ -10,5 +10,5 @@ from src.model.main_model import Model
 
 if __name__ == '__main__':
     modelo = Model()
-    vista = Controller(modelo)
-    vista.go()
+    vista = Controller(500, 500, "Aplicación de Prueba", modelo)
+    vista.start()
