@@ -1,62 +1,68 @@
 #!/usr/bin/python
+# -*- coding: UTF-8 -*-
 """Vista principal del programa.
 
-Con esto se pretende abstraer la parte de la vista del programa así pues,
-se genera un controlador que se encarga de todas las vistas del programa.
+Aqui es donde se pondrán los menus de la aplicación junto con los botones,
+necesarios para que funcione la primera vista de la aplicación.
 """
 try:
-    import Tkinter as gui_library
+    from Tkinter import ttk
 except ImportError:
-    import tkinter as gui_library
-from tkinter import ttk
+    from tkinter import ttk
 
 
 class View:
-    """Clase vista."""
+    """Clase Vista Principal.
+
+    Esta clase se encarga de crear los botones y demas widgets,
+    para el menú principal de la aplicación.
+    """
 
     __window = None  # Tipo ventana y se crea vacío.
     __mainframe = None  # Tipo Frame y se crea vacío
-    __height = None
-    __width = None
-    __title = None
-    __controller = None  # Esto almacena la lógica de la aplicación
 
-    def __init__(self, controller,
-                 title="Información del sistema", width=500, height=500,):
-        """Constructor por defecto."""
-        self.__window = gui_library.Tk()
-        self.__mainframe = ttk.Frame(self.__window, padding="3 3 12 12")
-        self.__height = height
-        self.__width = width
-        self.__title = title
-        self.__controller = controller
+    def __init__(self, window,):
+        """Constructor por defecto.
 
-    def initUI(self):
-        """Inicialización de la ventana.
-
-        Se utilizan parámetros por defecto para crear la ventana principal un,
-        tamaño predefinido y un nombre de aplicación y un icono por defecto.
+        Parameters
+        ----------
+        window : Window
+            Esta es una ventana donde se alojarán las diferentes vistas.
         """
+        self.__window = window
+
+    def __initVIEW(self):
+        """Método de creación de vista.
+
+        En este método es donde realmente se genera la vista de la,
+        ventana pues es donde se crean todos los widgets y se colocán,
+        en su lugar correspondiente.
+        """
+        # Creamos el marco
+        self.__mainframe = ttk.Frame(self.__window.get(), padding="3 3 12 12")
+        # El marco está en la posición 0,0 de la ventana en el centro
         self.__mainframe.grid(column=0, row=0, sticky=('NSEW'))
-        self.__mainframe.columnconfigure(0, weight=1)
-        self.__mainframe.rowconfigure(0, weight=1)
-        x = (self.__window.winfo_screenwidth() // 2) - (self.__width // 2)
-        y = (self.__window.winfo_screenheight() // 2) - (self.__height // 2)
-        self.__window.geometry('{}x{}+{}+{}'.format(self.__width,
-                                                    self.__height, x, y))
-        self.__window.title(self.__title)
-        self.__window.minsize(width=self.__width, height=self.__height)
-        self.__window.resizable(width=False, height=False)
+        # cantidad de columnas que tiene el marco
+        self.__mainframe.columnconfigure(12, weight=1)
+        # cantidad de filas que tiene el marco
+        self.__mainframe.rowconfigure(12, weight=1)
+        # crea bóton dentro de marco
+        b = ttk.Button(self.__mainframe, text="Salir")
+        # ponemos en la posición 6,6 y que se expanda a SurEste
+        b.grid(column=6, row=6, sticky=('SE'))
+        c = ttk.Button(self.__mainframe, text="Prueba")
+        c.grid(column=0, row=0, sticky=('NW'))
 
-    # def size(self, width, height):
-    #     """Asignación del tamaño de la ventana."""
-    #     self.__width = width
-    #     self.__height = height
+#    def get_view(self):
+#        """Devuelve la vista."""
+#        return self.__mainframe
 
-    def start(self):
-        """Poner en funcionamiento la vista.
+    def show(self):
+        """Muestra la vista en la ventana.
 
-        Se utiliza para poder poner el loop proncipal de la aplicación andando.
+        Con este método conseguimos que se muestre la vista en la ventana,
+        la cual se le ha pasado por párametros.
         """
-        self.initUI()
-        self.__window.mainloop()
+        self.__initVIEW()
+        self.__mainframe.state()  # cambiar este método por uno que
+        # muestre y oculte la vista

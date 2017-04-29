@@ -24,6 +24,15 @@ class Widgets:
         """Constructor por defecto."""
         self.__checkbutton = None
 
-    def Frame(self, padre):
+    def create_button(self, parent, text, callback):
+        """Añade un bóton a la ventana.
+
+        Con esto añadimos un bóton en la ventana en la posición que se,
+        indique por el numero que hay en el segundo párametro.
+        """
+        button = ttk.Button(parent, text=text, command=callback)
+        button.grid(row=6, column=6)
+
+    def Frame(self, parent):
         """Modificación de frame."""
-        self.__frame = ttk.Frame(padre, padding="3 3 12 12")
+        self.__frame = ttk.Frame(parent, padding="3 3 12 12")
