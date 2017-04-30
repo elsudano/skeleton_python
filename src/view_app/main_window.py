@@ -17,7 +17,7 @@ class Window:
     Esta clase se encarga de crear la ventana principal de la aplicación.
     """
 
-    __window = None  # Tipo ventana y se crea vacío.
+    __root = None  # Tipo ventana y se crea vacío.
     __height = None
     __width = None
     __title = None
@@ -34,7 +34,7 @@ class Window:
         height : int
             Indica el tamaño del alto de la ventana.
         """
-        self.__window = gui_library.Tk()
+        self.__root = gui_library.Tk()
         self.__height = height
         self.__width = width
         self.__title = title
@@ -49,18 +49,19 @@ class Window:
     #     style.configure("TFrame", background="black")
     #     style.configure("TButton", background="gray")
 
-    def __initUI(self):
+    def init_ui(self):
         """Inicialización de la ventana.
 
         Se utilizan parámetros por defecto para crear la ventana principal un,
         tamaño predefinido y un nombre de aplicación y un icono por defecto.
+        Como esta función se puede llamar desde cualquier lado para inicializar
+        la ventana se pone pública
         """
-        x = (self.__window.winfo_screenwidth() // 2) - (self.__width // 2)
-        y = (self.__window.winfo_screenheight() // 2) - (self.__height // 2)
-        self.__window.geometry('{}x{}+{}+{}'.format(self.__width,
-                                                    self.__height, x, y))
-        self.__window.title(self.__title)
-        self.__window.minsize(width=self.__width, height=self.__height)
+        x = (self.__root.winfo_screenwidth() // 2) - (self.__width // 2)
+        y = (self.__root.winfo_screenheight() // 2) - (self.__height // 2)
+        self.__root.geometry('{}x{}+{}+{}'.format(self.__width, self.__height, x, y))
+        self.__root.title(self.__title)
+        self.__root.minsize(width=self.__width, height=self.__height)
 
     def size(self, width, height):
         """Asignación del tamaño de la ventana.
@@ -74,7 +75,7 @@ class Window:
         """
         self.__width = width
         self.__height = height
-        self.__window.minsize(width=self.__width, height=self.__height)
+        self.init_ui()
 
     def change_state_size(self, state):
         """Convierte la ventana para que pueda cambiar de tamaño.
@@ -84,7 +85,7 @@ class Window:
         state : boolean
             Indica si se puede maximizar o no la ventana.
         """
-        self.__window.resizable(width=state, height=state)
+        self.__root.resizable(width=state, height=state)
 
     def set_title(self, t):
         """Asigna el título a la ventana.
@@ -98,12 +99,18 @@ class Window:
 
     def get(self):
         """Devuelve la root de la ventana."""
-        return self.__window
+        return self.__root
 
     def start(self):
         """Poner en funcionamiento la vista.
 
         Se utiliza para poder poner el loop proncipal de la aplicación andando.
         """
-        self.__initUI()
-        self.__window.mainloop()
+        self.__root.mainloop()
+
+    def stop(self):
+        """Detiene la aplicación.
+
+        Se utiliza para detener la aplicación.
+        """
+        self.__root.quit()

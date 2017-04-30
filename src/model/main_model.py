@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: UTF-8 -*-
 """Modelo de datos del programa.
 
 Con esto se pretende abstraer toda la logica del programa para que sea mucho,
