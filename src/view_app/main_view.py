@@ -30,6 +30,9 @@ class View(ABC):
     def _init_view(self):
         pass
 
+    def __delete__(self, instance):
+        self._principal_frame.destroy()
+
     def init_view(self):
         """Muestra la vista en la ventana.
 

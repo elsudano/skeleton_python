@@ -7,7 +7,8 @@ se genera un controlador que se encarga de todas las vistas del programa.
 """
 
 from src.view_app.main_window import Window
-from src.view_app.first_view import FirstView
+from src.view_app.views import FirstView
+from src.view_app.views import SecondView
 from src.model.main_model import Model
 
 
@@ -20,30 +21,41 @@ class Controller:
     def __init__(self):
         """Constructor por defecto."""
         self.__model = Model()
-        self.__window = Window("Prueba", 400, 500)
+        self.__window = Window("Ventana Principal", 300, 300)
         self.__view = FirstView(self.__window)
 
-    def m_start_application(self):
+    def start_application(self):
         """Ejecutar la aplicación.
 
         Es para encender la aplicación.
         """
         self.__window.init_ui()
         self.__view.init_view()
-        self.__view.b_exit.bind("<Button>", self.m_exit_application)
-        self.__view.b_change_size.bind("<Button>", self.m_change_size)
+        self.__view.b_exit.bind("<Button>", self.exit_application)
+        self.__view.b_change_size.bind("<Button>", self.change_size)
+        self.__view.b_new_view.bind("<Button>", self.new_view)
         self.__window.start()
 
-    def m_exit_application(self, event):
+    def exit_application(self, event):
         """Detener la aplicación.
 
         Es para detener la aplicación.
         """
         self.__window.stop()
 
-    def m_change_size(self, event):
+    def change_size(self, event):
         """Cambiar el tamaño de la Ventana
 
         Con esto hacemos la prueba de como podemos modificar el padre de la vista.
         """
-        self.__window.size(300, 300)
+        self.__window.size(150, 150)
+
+    def new_view(self, event):
+        """Cambia la vista de la ventana.
+
+        Con este método parece que pasamos a otra pantalla de la aplicación.
+        """
+        self.__view.__delete__(self)
+        self.__view = SecondView(self.__window)
+        self.__view.init_view()
+        self.__view.b_exit.bind("<Button>", self.exit_application)
