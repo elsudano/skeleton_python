@@ -3,7 +3,7 @@
 """Menú principal de la aplicación.
 
 Con este esqueleto se pretende tener un repositorio listo para empezar a,
-desarrollar casi caulquier tipo de aplicación con una interfaz miníma.
+desarrollar casi cualquier tipo de aplicación con una interfaz miníma.
 """
 
 from src.controller.main_controller import Controller
