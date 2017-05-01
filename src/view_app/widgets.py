@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: UTF-8 -*-
 """Generación fácil de widgets.
 
 Con esta clase se pretende generar los componentes que se pueden ver dentro de,

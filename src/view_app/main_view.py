@@ -36,6 +36,6 @@ class View(ABC):
         Con este método conseguimos que se muestre la vista en la ventana,
         la cual se le ha pasado por párametros.
         """
-        self._init_view()
         # aquí tienes que mirar el tamaño de la ventana y modificarlo para que se ajuste a la vista
-        self._principal_frame.state()  # cambiar este método por uno que muestre y oculte la vista
+        # self._principal_frame.state()  # cambiar este método por uno que muestre y oculte la vista
+        self._init_view()
