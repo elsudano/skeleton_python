@@ -7,8 +7,7 @@ se genera un controlador que se encarga de todas las vistas del programa.
 """
 
 from src.view_app.main_window import Window
-from src.view_app.views import FirstView
-from src.view_app.views import SecondView
+from src.view_app.views import *
 from src.model.main_model import Model
 
 

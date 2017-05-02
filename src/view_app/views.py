@@ -62,3 +62,4 @@ class SecondView(View):
         self.b_exit = ttk.Button(self._principal_frame, text="Exit")
         # ponemos en la posición 0,0 y que se expanda a SurEste
         self.b_exit.grid(column=0, row=0, sticky='SE')
+        self._add_menu("Archivo")
