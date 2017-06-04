@@ -9,7 +9,7 @@ try:
     from Tkinter import ttk
 except ImportError:
     from tkinter import ttk
-from src.view_app.main_view import View
+from src.view_app.view import View
 
 
 class FirstView(View):
@@ -25,7 +25,7 @@ class FirstView(View):
         # Creamos el marco
         self._principal_frame = ttk.Frame(self._window.get(), padding="3 3 12 12")
         # El marco está en la posición 0,0 de la ventana en el centro
-        self._principal_frame.grid(column=0, row=0, sticky='NSEW')
+        self._principal_frame.grid(column=0, row=0, sticky='N'+'S'+'E'+'W')
         # cantidad de columnas que tiene el marco
         self._principal_frame.columnconfigure(0, weight=1)
         # cantidad de filas que tiene el marco
@@ -33,11 +33,21 @@ class FirstView(View):
         # crea bóton dentro de marco
         self.b_exit = ttk.Button(self._principal_frame, text="Exit")
         # ponemos en la posición 0,1 y que se expanda a SurEste
-        self.b_exit.grid(column=1, row=0, sticky='SE')
+        self.b_exit.grid(column=1, row=1, sticky='SE')
+        # agregamos el comando del bóton
+        self.b_exit.bind("<Button>", self._controller.exit_application)
+        self.b_test = ttk.Button(self._principal_frame, text="Test")
+        self.b_test.grid(column=1, row=0, sticky='SE')
+        self.b_test.bind("<Button>", self._controller.test)
+        # --------------------------------------------------------------------------------
         self.b_change_size = ttk.Button(self._principal_frame, text="Change Size")
         self.b_change_size.grid(column=0, row=0, sticky='NW')
+        self.b_change_size.bind("<Button>", self._controller.change_size)
         self.b_new_view = ttk.Button(self._principal_frame, text="New View")
         self.b_new_view.grid(column=0, row=1, sticky='S')
+        self.b_new_view.bind("<Button>", self._controller.new_view)
+        self._add_menu("Archivo")
+        self._add_item_menu("Archivo", "Salir", self._controller.exit_application)
 
 
 class SecondView(View):
@@ -62,4 +72,6 @@ class SecondView(View):
         self.b_exit = ttk.Button(self._principal_frame, text="Exit")
         # ponemos en la posición 0,0 y que se expanda a SurEste
         self.b_exit.grid(column=0, row=0, sticky='SE')
+        # agregamos el comando del bóton
+        self.b_exit.bind("<Button>", self._controller.exit_application)
         self._add_menu("Archivo")
