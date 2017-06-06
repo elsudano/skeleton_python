@@ -7,13 +7,14 @@ de todas las vistas de nuestro programa.
 """
 
 from src.controller.controller import Controller
-from src.model.models import SecondModel
-from src.view_app.views import SecondView
+from src.model.models import *
+from src.view_app.views import *
 
 
 class FirstController(Controller):
 
-    def hacer_algo(self):
+    def back(self):
+        # FIXME: implementar
         pass
 
     def change_size(self, event):
@@ -29,7 +30,7 @@ class FirstController(Controller):
         model = SecondModel()
         controller = SecondController(self._window, model)
         view = SecondView(self._window, controller)
-        view._init_view()
+        view.init_view()
 
     def test(self, event):
         """Sirve para realizar test en la parte de la GUI"""
@@ -42,5 +43,6 @@ class FirstController(Controller):
 
 class SecondController(Controller):
 
-    def hacer_algo(self):
+    def back(self):
+
         pass
