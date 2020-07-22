@@ -21,7 +21,7 @@ class Controller(ABC):
         self._model = model
 
     @abstractmethod
-    def back(self):
+    def back(self, event):
         pass
 
     def menu_item_new(self):
@@ -29,7 +29,7 @@ class Controller(ABC):
 
         Realiza todas las operaciones para crear un nuevo Objeto.
         """
-        # FIXME: implementar Archivo/Nuevo
+        # FIXME: implementar, Esto es lo que se hará al pulsar Archivo/Nuevo
         pass
 
     def menu_item_open(self):
@@ -37,7 +37,7 @@ class Controller(ABC):
 
         Realiza todas las operaciones para abrir un Objeto.
         """
-        # FIXME: implementar Archivo/Abrir
+        # FIXME: implementar, Esto es lo que se hará al pulsar Archivo/Abrir
         pass
 
     def menu_item_save(self):
@@ -45,7 +45,7 @@ class Controller(ABC):
 
         Realiza todas las operaciones para guardar un Objeto.
         """
-        # FIXME: implementar Archivo/Guardar
+        # FIXME: implementar, Esto es lo que se hará al pulsar Archivo/Guardar
         pass
 
     def menu_item_cut(self):
@@ -53,7 +53,7 @@ class Controller(ABC):
 
         Lo que hay seleccionado lo pasa al portapapeles para usarlo despúes, borrando la selección.
         """
-        # FIXME: implementar Editar/Cortar
+        # FIXME: implementar, Esto es lo que se hará al pulsar Editar/Cortar
         pass
 
     def menu_item_copy(self):
@@ -61,7 +61,7 @@ class Controller(ABC):
 
         Lo que hay seleccionado lo pasa al portapapeles para usarlo despúes, sin borrar la selección.
         """
-        # FIXME: implementar Editar/Copiar
+        # FIXME: implementar, Esto es lo que se hará al pulsar Editar/Copiar
         pass
 
     def menu_item_paste(self):
@@ -69,7 +69,7 @@ class Controller(ABC):
 
         Lo que hay en el portapapeles se usa para ponerlo en donde se encuentra el cursor.
         """
-        # FIXME: implementar Editar/Pegar
+        # FIXME: implementar, Esto es lo que se hará al pulsar Editar/Pegar
         pass
 
     def menu_item_show_tools_bar(self):
@@ -77,7 +77,7 @@ class Controller(ABC):
 
         Con esta opción podemos mostrar u ocultar la barra de herramientas.
         """
-        # FIXME: implementar Ver/Mostrar barra de herramientas
+        # FIXME: implementar, Esto es lo que se hará al pulsar Ver/Mostrar barra de herramientas
         pass
 
     def menu_item_show_status_bar(self):
@@ -85,7 +85,7 @@ class Controller(ABC):
 
         Con esta opción podemos mostrar u ocultar la barra de estado.
         """
-        # FIXME: implementar Ver/Mostrar barra de estado
+        # FIXME: implementar, Esto es lo que se hará al pulsar Ver/Mostrar barra de estado
         pass
 
     def menu_item_other(self):
@@ -93,7 +93,7 @@ class Controller(ABC):
 
         Es para detener la aplicación desde el menu Archivo/Salir.
         """
-        # FIXME: implementar Herramientas/Utiles
+        # FIXME: implementar, Esto es lo que se hará al pulsar Herramientas/Utiles
         pass
 
     def menu_item_exit(self):

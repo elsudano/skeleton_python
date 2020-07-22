@@ -13,8 +13,8 @@ from src.view_app.views import *
 
 class FirstController(Controller):
 
-    def back(self):
-        # FIXME: implementar
+    def back(self, event):
+        # FIXME: implementar esta función para regresar al menu anterior
         pass
 
     def change_size(self, event):
@@ -43,6 +43,7 @@ class FirstController(Controller):
 
 class SecondController(Controller):
 
-    def back(self):
+    def back(self, event):
+        # FIXME: implementar esta función para regresar al menu anterior
 
         pass
