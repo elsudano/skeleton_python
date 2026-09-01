@@ -23,4 +23,4 @@ Linux:
 
 Windows:
 
-    python ma
+    python3 main.py

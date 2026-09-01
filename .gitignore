@@ -78,6 +78,9 @@ celerybeat-schedule
 # dotenv
 .env
 
+# VSCode
+.vscode
+
 # virtualenv
 venv/
 ENV/
@@ -90,3 +93,9 @@ ENV/
 
 # For IDE Idea
 \.idea/
+
+# Credentials
+.credential/
+credentials/
+client_secrets.json
+token.json
