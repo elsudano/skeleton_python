@@ -13,12 +13,29 @@ class Controller(ABC):
     """Clase controlador."""
 
     _window = None  # Tipo ventana y se crea vacío.
-    _model = None  # Esto almacena la lógica de la aplicación
+    _model = None  # This save the model of the application
+    _view = None  # This save the view of the current application status
 
-    def __init__(self, window, model):
+    def __init__(self, window, view, model):
         """Constructor por defecto."""
         self._window = window
+        self._view = view
         self._model = model
+        self._view._set_controller(self)
+        # con lo siguiente generamos toda la barra de menus que se ha creado para la vista
+        self._view._add_item_menu("File", "New", self.menu_item_new)
+        self._view._add_item_menu("File", "Open", self.menu_item_open)
+        self._view._add_item_menu("File", "Save", self.menu_item_save)
+        self._view._add_item_menu("File", "Exit", self.menu_item_exit)
+        self._view._add_item_menu("Edit", "Cut", self.menu_item_cut)
+        self._view._add_item_menu("Edit", "Copy", self.menu_item_copy)
+        self._view._add_item_menu("Edit", "Paste", self.menu_item_paste)
+        self._view._add_item_menu("Show", "Tool Bar", self.menu_item_show_tools_bar)
+        self._view._add_item_menu("Show", "Status Bar", self.menu_item_show_status_bar)
+        self._view._add_item_menu("Tools", "Utilities", self.menu_item_other)
+        self._view._init_view()
+        for menu in self._view._menus:
+            self._view._menu_bar.add_cascade(label=menu.cget('title'), menu=menu)
 
     @abstractmethod
     def back(self, event):
@@ -51,7 +68,7 @@ class Controller(ABC):
     def menu_item_cut(self):
         """Corta al portapapeles.
 
-        Lo que hay seleccionado lo pasa al portapapeles para usarlo despúes, borrando la selección.
+        Lo que hay seleccionado lo pasa al portapapeles para usarlo después, borrando la selección.
         """
         # FIXME: implementar, Esto es lo que se hará al pulsar Editar/Cortar
         pass
@@ -59,7 +76,7 @@ class Controller(ABC):
     def menu_item_copy(self):
         """Copia al portapapeles.
 
-        Lo que hay seleccionado lo pasa al portapapeles para usarlo despúes, sin borrar la selección.
+        Lo que hay seleccionado lo pasa al portapapeles para usarlo después, sin borrar la selección.
         """
         # FIXME: implementar, Esto es lo que se hará al pulsar Editar/Copiar
         pass
@@ -93,7 +110,7 @@ class Controller(ABC):
 
         Es para detener la aplicación desde el menu Archivo/Salir.
         """
-        # FIXME: implementar, Esto es lo que se hará al pulsar Herramientas/Utiles
+        # FIXME: implementar, Esto es lo que se hará al pulsar Herramientas/Útiles
         pass
 
     def menu_item_exit(self):

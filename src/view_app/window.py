@@ -63,7 +63,19 @@ class Window:
         self.__root.title(self.__title)
         self.__root.minsize(width=self.__width, height=self.__height)
 
-    def size(self, width, height):
+    def get_size(self):
+        """Mostrar el tamaño de la ventana.
+
+        Parameters
+        ----------
+        width : int
+            Indica el tamaño del ancho de la ventana.
+        height : int
+            Indica el tamaño del alto de la ventana.
+        """
+        return [self.__width,self.__height]
+
+    def set_size(self, width, height):
         """Asignación del tamaño de la ventana.
 
         Parameters
@@ -104,7 +116,7 @@ class Window:
     def start(self):
         """Poner en funcionamiento la vista.
 
-        Se utiliza para poder poner el loop proncipal de la aplicación andando.
+        Se utiliza para poder poner el loop principal de la aplicación andando.
         """
         self.__root.mainloop()
 
