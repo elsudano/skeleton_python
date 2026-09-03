@@ -99,3 +99,4 @@ ENV/
 credentials/
 client_secrets.json
 token.json
+instagram_session.json

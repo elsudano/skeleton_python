@@ -73,7 +73,11 @@ class ThirdController(Controller):
         view = FirstView(self._window)
         self = FirstController(self._window, view, model)
 
-    def select_file(self, event):
+    def _ask_instagram_2fa_code(self):
+        """Delega en la Vista la construcción y gestión de la ventana modal."""
+        return self._view.show_instagram_2fa_dialog()
+
+    def _select_file(self, event):
         """Abre un diálogo para seleccionar un archivo de video."""
         # Configurar las opciones del diálogo
         file_path = filedialog.askopenfilename(
@@ -103,8 +107,6 @@ class ThirdController(Controller):
             cb_platforms.append("youtube")
         if self._view.cb_instagram.instate(['selected']):
             cb_platforms.append("instagram")
-        if self._view.cb_tiktok.instate(['selected']):
-            cb_platforms.append("tiktok")
         # Validar que hay plataformas seleccionadas
         if not cb_platforms:
             self._mostrar_error("Por favor, selecciona al menos una plataforma.")
@@ -113,28 +115,27 @@ class ThirdController(Controller):
         if not string_path:
             self._mostrar_error("Por favor, selecciona un archivo de video.")
             return
+        self._model.instagram_2fa_callback = self._ask_instagram_2fa_code
         resultados = self._model.upload_video(string_path, string_title, string_location,text_description, cb_platforms)
         # Limpiar campos SOLO si hubo al menos una subida exitosa
         if resultados['exitosas']:
             print(f"✅ ÉXITO en: {', '.join(resultados['exitosas'])}")
+            self._clear_fields()
         if resultados['fallidas']:
             print(f"❌ FALLÓ en: {', '.join(resultados['fallidas'])}")
             print("\nDetalles de errores:")
             for plataforma, error in resultados['errores'].items():
                 print(f"  • {plataforma}: {error}")
-        if resultados['exitosas']:
-            self._clear_fields()
-        else:
-            self._mostrar_error("No se pudo subir a ninguna plataforma.")
+            self._mostrar_error("No se pudo subir en alguna plataforma.")
 
     def _clear_fields(self):
         self._view.e_path.delete(0, "")
         self._view.e_title.delete(0, "")
         self._view.e_geolocation.delete(0, "")
         self._view.tx_description.delete("1.0", tk.END)
-        self._view.cb_youtube.invoke()
-        self._view.cb_instagram.invoke()
-        self._view.cb_tiktok.invoke()
+        # self._view.cb_youtube.invoke()
+        # self._view.cb_instagram.invoke()
+        # self._view.cb_tiktok.invoke()
     
     def _mostrar_error(self, mensaje):
         """Muestra un mensaje de error al usuario."""

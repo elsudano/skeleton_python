@@ -157,10 +157,6 @@ class ThirdView(View):
         self.cb_instagram = ttk.Checkbutton(self._principal_frame,text="Instagram")
         self.cb_instagram.invoke()
         self.cb_instagram.grid(column=2, row=4, sticky='EW')
-        # CheckBox de Tiktok
-        self.cb_tiktok = ttk.Checkbutton(self._principal_frame,text="TikTok")
-        self.cb_tiktok.invoke()
-        self.cb_tiktok.grid(column=3, row=4, sticky='EW')
         # Titulo del Campo Descripción
         self.l_description = ttk.Label(self._principal_frame, text="Description:")
         self.l_description.grid(column=0, row=5, sticky='EW')
@@ -168,6 +164,39 @@ class ThirdView(View):
         self.tx_description = tk.Text(self._principal_frame, width=50, height=5)
         self.tx_description.grid(column=0, row=6, columnspan=13, sticky='EW')
         self.b_back.bind("<Button>", self._controller.back)
-        self.b_select_file.bind("<Button>", self._controller.select_file)
+        self.b_select_file.bind("<Button>", self._controller._select_file)
         self.b_run.bind("<Button>", self._controller.upload_video)
         self.b_exit.bind("<Button>", self._controller.exit_application)
+
+    def show_instagram_2fa_dialog(self):
+        """
+        Crea y muestra una ventana modal pidiendo el código de
+        verificación (2FA) de Instagram. Bloquea hasta que el usuario
+        confirma o cancela.
+ 
+        Returns:
+            str: el código introducido, o None si el usuario cancela.
+        """
+        result = {'valor': None}
+        modal_view = tk.Toplevel(self._window.get())
+        modal_view.title("Código de verificación de Instagram")
+        modal_view.geometry("340x160")
+        modal_view.grab_set()  # modal: bloquea el resto de la app
+        modal_view.resizable(False, False)
+        ttk.Label(modal_view,text="Instagram requiere el código de verificación (2FA).\nMíralo en tu app de autenticación:",wraplength=300,justify='left',).pack(padx=10, pady=(10, 5), anchor='w')
+        modal_input = ttk.Entry(modal_view, width=20)
+        modal_input.pack(padx=10, pady=5)
+        modal_input.focus_set()
+        def confirmar(event=None):
+            result['valor'] = modal_input.get().strip()
+            modal_view.destroy()
+        def cancelar():
+            result['valor'] = None
+            modal_view.destroy()
+        modal_input.bind("<Return>", confirmar)  # Enter también confirma
+        modal_bt_frame = ttk.Frame(modal_view)
+        modal_bt_frame.pack(pady=10)
+        ttk.Button(modal_bt_frame, text="Confirmar", command=confirmar).pack(side='left', padx=5)
+        ttk.Button(modal_bt_frame, text="Cancelar", command=cancelar).pack(side='left', padx=5)
+        modal_view.wait_window()  # bloquea aquí hasta que se cierre la ventana
+        return result['valor']

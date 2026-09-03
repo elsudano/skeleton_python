@@ -7,12 +7,9 @@ que se pueden usar para nuestro programa.
 """
 
 import os
-import datetime
-import googlemaps
 import simplekml
-import json
 import instagrapi
-from tiktok_direct_post import TikTokClient, build_auth_url, exchange_code
+import googlemaps
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -20,6 +17,7 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from src.model.model import Model
 
+INSTAGRAM_SESSION_FILE = 'instagram_session.json'
 
 class FirstModel(Model):
 
@@ -93,21 +91,65 @@ class ThirdModel(Model):
             )
         return username, password
 
-    def _load_tiktok_credentials(self):
-        """Carga las credenciales de TikTok desde el archivo .env."""
-        client_key = os.getenv('TIKTOK_CLIENT_KEY')
-        client_secret = os.getenv('TIKTOK_CLIENT_SECRET')
-        redirect_uri = os.getenv('TIKTOK_REDIRECT_URI')
-        
-        if not client_key or not client_secret or not redirect_uri:
-            raise Exception(
-                "Credenciales de TikTok no configuradas.\n"
-                "Asegúrate de tener un archivo .env con:\n"
-                "TIKTOK_CLIENT_KEY=tu_client_key\n"
-                "TIKTOK_CLIENT_SECRET=tu_client_secret\n"
-                "TIKTOK_REDIRECT_URI=https://tu-url-de-callback.com"
+    @property
+    def instagram_2fa_callback(self):
+        return getattr(self, '_instagram_2fa_callback', None)
+ 
+    @instagram_2fa_callback.setter
+    def instagram_2fa_callback(self, callback):
+        self._instagram_2fa_callback = callback
+ 
+    def _ask_code_2fa_instagram(self):
+        """Pide el código 2FA usando el callback registrado, o cae a
+        input() por consola si no hay ninguno (uso del modelo sin GUI)."""
+        if self.instagram_2fa_callback is not None:
+            codigo = self.instagram_2fa_callback()
+        else:
+            codigo = input(
+                "🔐 Instagram pide el código de verificación (2FA). Introdúcelo ahora: "
             )
-        return client_key, client_secret, redirect_uri
+ 
+        if not codigo or not codigo.strip():
+            raise Exception("No se ha introducido ningún código de verificación de Instagram.")
+        return codigo.strip()
+
+    def _get_instagram_client(self):
+        """
+        Devuelve un cliente de instagrapi ya autenticado, reutilizando
+        la sesión guardada si es válida. Si no hay sesión válida, hace
+        login completo (pidiendo el código de 2FA vía el callback
+        registrado, normalmente una ventana emergente) y guarda la
+        sesión para la próxima vez.
+        """
+        username, password = self._load_instagram_credentials()
+        client = instagrapi.Client()
+        login_via_session = False
+        if os.path.exists(INSTAGRAM_SESSION_FILE):
+            try:
+                session = client.load_settings(INSTAGRAM_SESSION_FILE)
+                client.set_settings(session)
+                client.login(username, password)
+                client.get_timeline_feed()
+                login_via_session = True
+                print("✅ Instagram: sesión reutilizada (sin pedir 2FA).")
+            except Exception as e:
+                print(f"⚠️ Instagram: la sesión guardada ya no es válida ({e}). Se requiere login completo.")
+                login_via_session = False
+        if not login_via_session:
+            try:
+                client.login(username, password)
+            except instagrapi.exceptions.TwoFactorRequired:
+                verification_code = self._ask_code_2fa_instagram()
+                client.login(username, password, verification_code=verification_code)
+            except Exception as e:
+                if "two-factor" in str(e).lower() or "2fa" in str(e).lower():
+                    verification_code = self._ask_code_2fa_instagram()
+                    client.login(username, password, verification_code=verification_code)
+                else:
+                    raise
+            client.dump_settings(INSTAGRAM_SESSION_FILE)
+            print("✅ Instagram: login completo y sesión guardada para la próxima vez.")
+        return client
 
     def _upload_to_youtube(self, string_path, string_title, text_description):
         # 1. Autenticación con las librerías modernas
@@ -144,11 +186,8 @@ class ThirdModel(Model):
     def _upload_to_instagram(self, string_path, string_title, text_description):
         """Método para subir un video a Instagram usando instagrapi."""
         try:
-            # Cargar credenciales desde .env
-            username, password = self._load_instagram_credentials()
             # Inicializar el cliente de Instagram
-            client = instagrapi.Client()
-            client.login(username, password)
+            client = self._get_instagram_client()
             # Subir el video
             result = client.clip_upload(string_path,caption=f"{string_title}\n\n{text_description}",)
             print(f"Instagram subido. ID: {result.id}")
@@ -165,23 +204,6 @@ class ThirdModel(Model):
                 raise Exception(f"Error de Instagram: {str(e)}")
         except Exception as e:
             raise Exception(f"Error inesperado en Instagram: {str(e)}")
-        finally:
-            # Cerrar sesión
-            client.logout()
-
-    def _upload_to_tiktok(self, string_path, string_title, text_description):
-        """
-        Sube un video a la bandeja de borradores de TikTok.
-        
-        Args:
-            string_path: Ruta al archivo de video
-            string_title: Título del video
-            text_description: Descripción del video
-            
-        Returns:
-            dict: Resultado de la subida con 'publish_id' y 'status'
-        """
-        pass
 
     def upload_video(self, string_path, string_title, string_location, text_description, cb_platforms):
         # Variable para recoger los datos
@@ -225,14 +247,4 @@ class ThirdModel(Model):
                 resultados['fallidas'].append('Instagram')
                 resultados['errores']['Instagram'] = error_msg
                 print(f"❌ Instagram: Error - {error_msg}")
-        if "tiktok" in cb_platforms:
-            try:
-                print("\n📤 Subiendo a TIKTOK...")
-                self._upload_to_tiktok(string_path, string_title, text_description)
-                resultados['exitosas'].append('TikTok')
-            except Exception as e:
-                error_msg = str(e)
-                resultados['fallidas'].append('TikTok')
-                resultados['errores']['TikTok'] = error_msg
-                print(f"❌ TikTok: Error - {error_msg}")
         return resultados
