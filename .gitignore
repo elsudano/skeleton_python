@@ -95,7 +95,7 @@ ENV/
 \.idea/
 
 # Credentials
-.credential/
+.credentials/
 credentials/
 client_secrets.json
 token.json
