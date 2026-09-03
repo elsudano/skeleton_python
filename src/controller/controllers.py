@@ -129,13 +129,14 @@ class ThirdController(Controller):
         self._view.b_run.config(text="Upload Video")
         if resultados['exitosas']:
             print(f"✅ ÉXITO en: {', '.join(resultados['exitosas'])}")
-            self._clear_fields()
         if resultados['fallidas']:
             print(f"❌ FALLÓ en: {', '.join(resultados['fallidas'])}")
             print("\nDetalles de errores:")
             for plataforma, error in resultados['errores'].items():
                 print(f"  • {plataforma}: {error}")
             self._mostrar_error("No se pudo subir en alguna plataforma.")
+        else:
+            self._clear_fields()
 
     def _clear_fields(self):
         self._view.e_path.delete(0, "")
