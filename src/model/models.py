@@ -136,11 +136,12 @@ class ThirdModel(Model):
                 client.login(username, password)
                 client.get_timeline_feed()
                 login_via_session = True
-                print("✅ Instagram: sesión reutilizada (sin pedir 2FA).")
+                print("Instagram: sesión reutilizada (sin pedir 2FA).")
             except Exception as e:
-                print(f"⚠️ Instagram: la sesión guardada ya no es válida ({e}). Se requiere login completo.")
+                print(f"Instagram: la sesión guardada ya no es válida ({e}). Se requiere login completo.")
                 login_via_session = False
         if not login_via_session:
+            client = instagrapi.Client()
             try:
                 client.login(username, password)
             except instagrapi.exceptions.TwoFactorRequired:
@@ -153,7 +154,7 @@ class ThirdModel(Model):
                 else:
                     raise
             client.dump_settings(INSTAGRAM_SESSION_FILE)
-            print("✅ Instagram: login completo y sesión guardada para la próxima vez.")
+            print("Instagram: login completo y sesión guardada para la próxima vez.")
         return client
 
     def _upload_to_youtube(self, string_path, string_title, text_description):
