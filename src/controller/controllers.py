@@ -7,6 +7,7 @@ all the features on our application, that means that we will have
 many classes to control all the behavior of our application.
 """
 
+import threading
 from src.controller.controller import Controller
 from src.model.models import *
 from src.view_app.views import *
@@ -97,7 +98,6 @@ class ThirdController(Controller):
             self._view.e_path.insert(0, file_path)  # Insertar la ruta seleccionada
 
     def upload_video(self, event):
-        # Obtener datos de la vista
         string_path = self._view.e_path.get()
         string_title = self._view.e_title.get()
         string_location = self._view.e_geolocation.get()
@@ -107,17 +107,26 @@ class ThirdController(Controller):
             cb_platforms.append("youtube")
         if self._view.cb_instagram.instate(['selected']):
             cb_platforms.append("instagram")
-        # Validar que hay plataformas seleccionadas
         if not cb_platforms:
             self._mostrar_error("Por favor, selecciona al menos una plataforma.")
             return
-        # Validar que hay un archivo seleccionado
         if not string_path:
             self._mostrar_error("Por favor, selecciona un archivo de video.")
             return
         self._model.instagram_2fa_callback = self._ask_instagram_2fa_code
-        resultados = self._model.upload_video(string_path, string_title, string_location,text_description, cb_platforms)
-        # Limpiar campos SOLO si hubo al menos una subida exitosa
+        self._view.b_run.state(['disabled'])
+        self._view.b_run.config(text="Uploading...")
+        def tarea_en_segundo_plano():
+            resultados = self._model.upload_video(
+                string_path, string_title, string_location, text_description, cb_platforms
+            )
+            self._window.get().after(0, lambda: self._on_upload_finished(resultados))
+        threading.Thread(target=tarea_en_segundo_plano, daemon=True).start()
+ 
+    def _on_upload_finished(self, resultados):
+        """Se ejecuta en el hilo principal de Tkinter cuando la subida termina."""
+        self._view.b_run.state(['!disabled'])
+        self._view.b_run.config(text="Upload Video")
         if resultados['exitosas']:
             print(f"✅ ÉXITO en: {', '.join(resultados['exitosas'])}")
             self._clear_fields()
