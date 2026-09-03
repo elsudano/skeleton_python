@@ -17,7 +17,12 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from src.model.model import Model
 
-INSTAGRAM_SESSION_FILE = 'instagram_session.json'
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+_CREDENTIALS_DIR = os.path.join(_PROJECT_ROOT, '.credentials')
+os.makedirs(_CREDENTIALS_DIR, exist_ok=True)
+ 
+INSTAGRAM_SESSION_FILE = os.path.join(_CREDENTIALS_DIR, 'instagram_session.json')
+YOUTUBE_SESSION_FLE = os.path.join(_CREDENTIALS_DIR, 'youtube_session.json')
 
 class FirstModel(Model):
 
@@ -154,11 +159,10 @@ class ThirdModel(Model):
     def _upload_to_youtube(self, string_path, string_title, text_description):
         # 1. Autenticación con las librerías modernas
         creds = None
-        token_file = 'token.json'
         client_secret_file = self._load_youtube_credentials()
         # Cargar credenciales guardadas
-        if os.path.exists(token_file):
-            creds = Credentials.from_authorized_user_file(token_file)
+        if os.path.exists(YOUTUBE_SESSION_FLE):
+            creds = Credentials.from_authorized_user_file(YOUTUBE_SESSION_FLE)
         # Si no hay credenciales válidas, iniciar flujo OAuth
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
@@ -170,7 +174,7 @@ class ThirdModel(Model):
                 )
                 creds = flow.run_local_server(port=0)
             # Guardar credenciales para futuras ejecuciones
-            with open(token_file, 'w') as token:
+            with open(YOUTUBE_SESSION_FLE, 'w') as token:
                 token.write(creds.to_json())
         # 2. Construir el servicio de YouTube
         youtube = build('youtube', 'v3', credentials=creds)
