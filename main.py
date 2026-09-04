@@ -5,11 +5,11 @@
 Con este esqueleto se pretende tener un repositorio listo para empezar a,
 desarrollar casi cualquier tipo de aplicación con una interfaz mínima.
 """
+import os
 from src.view_app.window import Window
 from src.model.models import FirstModel
 from src.controller.controllers import FirstController
 from src.view_app.views import FirstView
-
 
 if __name__ == '__main__':
     # Creamos la Ventana
