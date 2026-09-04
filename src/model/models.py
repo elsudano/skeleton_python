@@ -16,13 +16,9 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from src.model.model import Model
+from src.config import (CREDENTIALS_DIR,YOUTUBE_CLIENT_SECRET_FILE,YOUTUBE_SESSION_FILE,INSTAGRAM_SESSION_FILE)
 
-_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-_CREDENTIALS_DIR = os.path.join(_PROJECT_ROOT, '.credentials')
-os.makedirs(_CREDENTIALS_DIR, exist_ok=True)
- 
-INSTAGRAM_SESSION_FILE = os.path.join(_CREDENTIALS_DIR, 'instagram_session.json')
-YOUTUBE_SESSION_FLE = os.path.join(_CREDENTIALS_DIR, 'youtube_session.json')
+os.makedirs(CREDENTIALS_DIR, exist_ok=True)
 
 class FirstModel(Model):
 
@@ -73,16 +69,6 @@ class ThirdModel(Model):
     def hacer_algo(self):
         pass
 
-    def _load_youtube_credentials(self):
-        client_secret_file = os.getenv('YOUTUBE_CLIENT_SECRET_FILE')
-        if not client_secret_file:
-            raise Exception(
-                "Fichero de Credenciales de Youtube no configuradas.\n"
-                "Asegúrate de tener un archivo .env con:\n"
-                "YOUTUBE_CLIENT_SECRET_FILE=ruta_del_fichero_json"
-            )
-        return client_secret_file
-
     def _load_instagram_credentials(self):
         """Carga las credenciales de Instagram desde el archivo .env"""
         username = os.getenv('INSTAGRAM_USERNAME')
@@ -104,19 +90,28 @@ class ThirdModel(Model):
     def instagram_2fa_callback(self, callback):
         self._instagram_2fa_callback = callback
  
-    def _ask_code_2fa_instagram(self):
-        """Pide el código 2FA usando el callback registrado, o cae a
-        input() por consola si no hay ninguno (uso del modelo sin GUI)."""
-        if self.instagram_2fa_callback is not None:
-            codigo = self.instagram_2fa_callback()
-        else:
-            codigo = input(
-                "🔐 Instagram pide el código de verificación (2FA). Introdúcelo ahora: "
-            )
- 
-        if not codigo or not codigo.strip():
-            raise Exception("No se ha introducido ningún código de verificación de Instagram.")
-        return codigo.strip()
+    def _login_con_2fa_instagram(self, client, username, password, max_intentos=3):
+        """Pide el código 2FA (vía callback de la Vista, o input() si no hay
+        ninguno registrado) y reintenta el login hasta max_intentos veces."""
+        for intento in range(1, max_intentos + 1):
+            if self.instagram_2fa_callback is not None:
+                codigo = self.instagram_2fa_callback()
+            else:
+                codigo = input("Instagram pide el código de verificación (2FA). Introdúcelo ahora: ")
+    
+            if not codigo or not codigo.strip():
+                if intento == max_intentos:
+                    raise Exception("No se ha introducido ningún código de verificación de Instagram.")
+                print(f"⚠️ Código vacío (intento {intento}/{max_intentos}), inténtalo de nuevo.")
+                continue
+    
+            try:
+                client.login(username, password, verification_code=codigo.strip())
+                return
+            except Exception as e:
+                if intento == max_intentos:
+                    raise Exception(f"Código 2FA incorrecto tras {max_intentos} intentos: {e}")
+                print(f"⚠️ Código incorrecto (intento {intento}/{max_intentos}), inténtalo de nuevo.")
 
     def _get_instagram_client(self):
         """
@@ -145,12 +140,10 @@ class ThirdModel(Model):
             try:
                 client.login(username, password)
             except instagrapi.exceptions.TwoFactorRequired:
-                verification_code = self._ask_code_2fa_instagram()
-                client.login(username, password, verification_code=verification_code)
+                self._login_con_2fa_instagram(client, username, password)
             except Exception as e:
                 if "two-factor" in str(e).lower() or "2fa" in str(e).lower():
-                    verification_code = self._ask_code_2fa_instagram()
-                    client.login(username, password, verification_code=verification_code)
+                    self._login_con_2fa_instagram(client, username, password)
                 else:
                     raise
             client.dump_settings(INSTAGRAM_SESSION_FILE)
@@ -158,24 +151,19 @@ class ThirdModel(Model):
         return client
 
     def _upload_to_youtube(self, string_path, string_title, text_description):
-        # 1. Autenticación con las librerías modernas
         creds = None
-        client_secret_file = self._load_youtube_credentials()
         # Cargar credenciales guardadas
-        if os.path.exists(YOUTUBE_SESSION_FLE):
-            creds = Credentials.from_authorized_user_file(YOUTUBE_SESSION_FLE)
+        if os.path.exists(YOUTUBE_SESSION_FILE):
+            creds = Credentials.from_authorized_user_file(YOUTUBE_SESSION_FILE)
         # Si no hay credenciales válidas, iniciar flujo OAuth
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    client_secret_file,
-                    scopes=['https://www.googleapis.com/auth/youtube.upload']
-                )
+                flow = InstalledAppFlow.from_client_secrets_file(YOUTUBE_CLIENT_SECRET_FILE,scopes=['https://www.googleapis.com/auth/youtube.upload'])
                 creds = flow.run_local_server(port=0)
             # Guardar credenciales para futuras ejecuciones
-            with open(YOUTUBE_SESSION_FLE, 'w') as token:
+            with open(YOUTUBE_SESSION_FILE, 'w') as token:
                 token.write(creds.to_json())
         # 2. Construir el servicio de YouTube
         youtube = build('youtube', 'v3', credentials=creds)

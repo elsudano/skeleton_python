@@ -9,21 +9,22 @@ mas fácil encontrar en donde se encuentra cada parte del programa.
 import os
 from abc import ABC, abstractmethod
 from dotenv import load_dotenv
+from src.config import ENV_FILE
 
 class Model(ABC):
     """Clase controlador."""
 
     def __init__(self):
         """Constructor por defecto."""
-        env_file = '.env'
-        if not os.path.exists(env_file):
+        if not os.path.exists(ENV_FILE):
             print("ADVERTENCIA: No se encontró el archivo .env")
-            print(f"Crea un archivo {env_file} con tus credenciales.")
+            print(f"Crea un archivo {ENV_FILE} con tus credenciales.")
             print("Ejemplo de contenido:")
-            print("INSTAGRAM_USERNAME=tu_usuario")
-            print("INSTAGRAM_PASSWORD=tu_contraseña")
+            print("YOUTUBE_CLIENT_SECRET_FILE=.credentials/client_secrets.json")
+            print("INSTAGRAM_USERNAME=usuario")
+            print("INSTAGRAM_PASSWORD=password")
             return
-        load_dotenv()
+        load_dotenv(ENV_FILE)
 
     @abstractmethod
     def hacer_algo(self):
