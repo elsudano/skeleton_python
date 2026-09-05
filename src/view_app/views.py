@@ -103,7 +103,7 @@ class SecondView(View):
         self._add_item_menu("ViewMenu2", "Exit", self._controller.menu_item_exit)
 
 class ThirdView(View):
-    """Vista para subir videos a las plataformas de Youtube, Instagram y Tiktok."""
+    """Vista para subir videos a las plataformas de Youtube y Instagram."""
 
     def _init_view(self):
         """Método de creación de vista.

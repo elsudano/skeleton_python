@@ -145,7 +145,6 @@ class ThirdController(Controller):
         self._view.tx_description.delete("1.0", tk.END)
         # self._view.cb_youtube.invoke()
         # self._view.cb_instagram.invoke()
-        # self._view.cb_tiktok.invoke()
     
     def _mostrar_error(self, mensaje):
         """Muestra un mensaje de error al usuario."""
