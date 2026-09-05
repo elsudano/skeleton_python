@@ -7,7 +7,6 @@ google-auth-oauthlib
 google-generativeai
 googleapis-common-protos
 googlemaps
-moviepy==2.2.1
-instagrapi==2.15.0
+instagrapi
 python-dotenv
 simplekml
