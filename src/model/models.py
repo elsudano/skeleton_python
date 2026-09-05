@@ -182,7 +182,7 @@ class ThirdModel(Model):
             # Inicializar el cliente de Instagram
             client = self._get_instagram_client()
             # Subir el video
-            result = client.clip_upload(string_path,caption=f"{string_title}\n\n{text_description}",)
+            result = client.clip_upload(string_path,caption=f"{string_title}\n\n{text_description}",thumbnail=f"thumbnail.jpg",)
             print(f"Instagram subido. ID: {result.id}")
         except instagrapi.exceptions.LoginRequired:
             raise Exception("La sesión de Instagram ha expirado. Verifica tus credenciales.")
