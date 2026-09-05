@@ -9,5 +9,5 @@ googleapis-common-protos
 googlemaps
 moviepy==2.2.1
 instagrapi==2.15.0
-dotenv
+python-dotenv
 simplekml
