@@ -32,6 +32,7 @@ class Controller(ABC):
         self._view._add_item_menu("Edit", "Paste", self.menu_item_paste)
         self._view._add_item_menu("Show", "Tool Bar", self.menu_item_show_tools_bar)
         self._view._add_item_menu("Show", "Status Bar", self.menu_item_show_status_bar)
+        self._view._add_item_menu("Tools", "Change Theme", self.change_theme)
         self._view._add_item_menu("Tools", "Utilities", self.menu_item_other)
         self._view._init_view()
         for menu in self._view._menus:
