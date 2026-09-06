@@ -10,3 +10,4 @@ googlemaps
 instagrapi
 python-dotenv
 simplekml
+ttkbootstrap

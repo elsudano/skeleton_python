@@ -32,7 +32,7 @@ class SecondModel(Model):
 
     def get_directions(self, from_string, to_string, method, transit_method="rail"):
         """With this app we can create a KML file with the route from Google Maps"""
-        gmaps = googlemaps.Client(key='AIzaSyC-HHbRpdeiw2Q1ZsIJ3Cgg8MEAZPBuPAI')
+        gmaps = googlemaps.Client(key=os.getenv('GMAPS_API_KEY'))
         directions = None
         if from_string and to_string != "":
             print("Values:\n\tFrom:" + from_string + "\n\tTo:" + to_string)

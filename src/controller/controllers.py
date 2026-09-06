@@ -53,7 +53,6 @@ class FirstController(Controller):
             print('Valor de ' + array_of_events[pos] + ' = ')
             print(array_of_events[pos])
 
-
 class SecondController(Controller):
 
     def back(self, event):
@@ -75,8 +74,16 @@ class ThirdController(Controller):
         self = FirstController(self._window, view, model)
 
     def _ask_instagram_2fa_code(self):
-        """Delega en la Vista la construcción y gestión de la ventana modal."""
-        return self._view.show_instagram_2fa_dialog()
+        """Solicita el código 2FA ejecutando la ventana en el hilo principal."""
+        resultado = {'valor': None}
+        evento = threading.Event()
+        def mostrar_dialogo():
+            resultado['valor'] = self._view.show_instagram_2fa_dialog()
+            evento.set()
+        self._window.get().after(0, mostrar_dialogo)
+        evento.wait()
+
+        return resultado['valor']
 
     def _select_file(self, event):
         """Abre un diálogo para seleccionar un archivo de video."""
@@ -139,9 +146,9 @@ class ThirdController(Controller):
             self._clear_fields()
 
     def _clear_fields(self):
-        self._view.e_path.delete(0, "")
-        self._view.e_title.delete(0, "")
-        self._view.e_geolocation.delete(0, "")
+        self._view.e_path.delete(0, tk.END)
+        self._view.e_title.delete(0, tk.END)
+        self._view.e_geolocation.delete(0, tk.END)
         self._view.tx_description.delete("1.0", tk.END)
         # self._view.cb_youtube.invoke()
         # self._view.cb_instagram.invoke()

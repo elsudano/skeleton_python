@@ -5,11 +5,7 @@
 Con esta clase se pretende generar los componentes que se pueden ver dentro de,
 una ventana de manera sencilla.
 """
-try:
-    from Tkinter import ttk
-except ImportError:
-    from tkinter import ttk
-
+import ttkbootstrap as ttk
 
 class Widgets:
     """Clase Widgets."""

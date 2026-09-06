@@ -1,8 +1,8 @@
 #!/bin/bash
-# aqui hace falta comprobar si tenemos instalado el
+# aquí hace falta comprobar si tenemos instalado el
 # pyinstall y si no es el caso instalarlo y preguntarle
 # al usuario si quiere instalarlo
-# Tambien tiene que leer el primer parametro que se
-# encarga de añadir el nombre a la aplicacion
+# También tiene que leer el primer parámetro que se
+# encarga de añadir el nombre a la aplicación
 
-pyinstaller --noconfirm --clean --onefile --name $1 main.py
+pyinstaller --noconfirm --clean --onefile --name $1 skeleton_python.spec

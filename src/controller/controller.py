@@ -41,6 +41,17 @@ class Controller(ABC):
     def back(self, event):
         pass
 
+    def change_theme(self, event):
+        """Estilo de tipo Dark.
+
+        Esta función se encarga de formatear todos los componentes para,
+        simular un entorno dark, en la aplicación.
+        """
+        if self._window.get_theme() == "superhero":
+            self._window.set_theme("darkly")
+        else:
+            self._window.set_theme("superhero")
+
     def menu_item_new(self):
         """Crear un nuevo Objeto.
 
