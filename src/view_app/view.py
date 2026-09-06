@@ -9,7 +9,21 @@ from abc import ABC, abstractmethod
 
 
 class View(ABC):
-    """Clase Vista Principal."""
+    """Mainly view Class.
+    
+    Global Variables:
+    ----------------
+    _window : Window 
+        The Main Window of the app
+    _controller : Controller
+        The Controller of the View
+    _principal_frame : Frame
+        The container where we will put all the widgets (Buttons, Labels, etc...)
+    _menu_bar : Menu
+        The Menu Objet where we will put the Menus
+    _menus : list
+        This will be the list of the menus that we want to create in our app
+    """
 
     _window = None  # Tipo ventana y se crea vacío.
     _controller = None  # Tipo Controlador y se crea vacío
@@ -18,41 +32,46 @@ class View(ABC):
     _menus = None  # Estos son los menus de la vista
 
     def __init__(self, window):
-        """Constructor por defecto.
+        """Constructor by default.
+
         Parameters
         ----------
         window : Window
-            Esta es una ventana donde se alojarán las diferentes vistas.
+            This will be the Window where you will see the views.
         """
-        # Esto es para inicializar la Abstract Base Class
         super(View, self).__init__()
         self._window = window
         self._menu_bar = tk.Menu(self._window.get())
         self._menus = list()
         self._window.get().config(menu=self._menu_bar)
         self._add_menu("File")
-        self._add_menu_separator("File")
         self._add_menu("Edit")
         self._add_menu("Show")
         self._add_menu("Tools")
  
     def _set_controller(self, controller):
         """Setting the controller of the view.
+
         Parameters
         ----------
         controller : Controller
             This will be the controller that manage the view and the model that we will use to the application
         """
         self._controller = controller
-        self._add_item_menu("Tools", "Change Theme", self._controller.change_theme)
         self._window.init_ui()
 
     @abstractmethod
     def _init_view(self):
         pass
 
-    def _add_menu(self, name):
-        """Añade un menú a la barra de menus"""
+    def _add_menu(self, name = ""):
+        """Add an menu in the Menu Bar.
+
+        Parameters
+        ----------
+        name : string
+            This will be the Label of the menu
+        """
         menu_aux = tk.Menu(self._menu_bar)
         menu_aux.config(title=name)
         # FIXME: arreglar la inclusión de posicionamiento del menú
@@ -61,8 +80,18 @@ class View(ABC):
         # función y cambiar el indice por el len de la siguiente linea
         self._menus.insert(len(self._menus), menu_aux)
 
-    def _add_item_menu(self, parent, name, command):
-        """Añade una opción a los menus"""
+    def _add_item_menu(self, parent = "", name = "", command = ()):
+        """Add an option in the menu.
+
+        Parameters
+        ----------
+        parent : string
+            This will be the menu where we want to add an option
+        name : string
+            The label of the option
+        command : method
+            Which one is the method that this option run at press
+        """
         for menu in self._menus:
             if menu.cget('title') == parent:
                 menu.add_command(label=name, command=command)
@@ -74,8 +103,14 @@ class View(ABC):
                 # parámetros de la función y cambiar el indice de la función anterior
                 # por el que se pasa por parámetros.
 
-    def _add_menu_separator(self, name):
-        """Añade un separador al menu"""
+    def _add_menu_separator(self, name = ""):
+        """Add an Separator in your Menu item.
+
+        Parameters
+        ----------
+        name : string
+            Just an ID for the separator
+        """
         for menu in self._menus:
             if menu.cget('title') == name:
                 menu.add_separator()
