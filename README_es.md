@@ -47,23 +47,26 @@ Cada "pantalla" de la aplicación (por ejemplo, el subidor de vídeos) se implem
 
 ```
 .
-├── main.py                        # Punto de entrada de la aplicación
-├── requirements.txt                # Dependencias del proyecto
-├── skeleton_python.spec            # Configuración de empaquetado con PyInstaller
-├── thumbnail.jpg                   # Recurso usado por el módulo de Instagram
-└── src/
-    ├── config.py                   # Rutas y configuración centralizada (dev vs. binario)
-    ├── model/
-    │   ├── model.py                 # Clase base Model (ABC)
-    │   └── models.py                # Modelos concretos (First/Second/Third)
-    ├── controller/
-    │   ├── controller.py            # Clase base Controller (ABC)
-    │   └── controllers.py           # Controladores concretos (First/Second/Third)
-    └── view_app/
-        ├── view.py                  # Clase base View (ABC)
-        ├── views.py                  # Vistas concretas (First/Second/Third)
-        ├── widgets.py                 # Widgets auxiliares reutilizables
-        └── window.py                  # Envoltorio de la ventana principal
+├── main.py                # Punto de entrada de la aplicación
+├── requirements.txt       # Dependencias del proyecto
+├── skeleton_python.spec   # Configuración de empaquetado con PyInstaller
+├── src/
+│   ├── config.py          # Rutas y configuración centralizada (dev vs. binario)
+│   ├── model/
+│   │   ├── model.py       # Clase base Model (ABC)
+│   │   └── models.py      # Modelos concretos (First/Second/Third)
+│   ├── controller/
+│   │   ├── controller.py  # Clase base Controller (ABC)
+│   │   └── controllers.py # Controladores concretos (First/Second/Third)
+│   └── view_app/
+│       ├── view.py        # Clase base View (ABC)
+│       ├── views.py       # Vistas concretas (First/Second/Third)
+│       ├── widgets.py     # Widgets auxiliares reutilizables
+│       └── window.py      # Envoltorio de la ventana principal
+└── assets/
+    ├── thumbnail.jpg       # Recurso usado por el módulo de Instagram
+    ├── icon.png            # Recurso usado por Pyinstaller
+    └── icon.ico            # Recurso usado por Pyinstaller
 ```
 
 > El proyecto está preparado para admitir en el futuro otro tipo de interfaces (por ejemplo, una vista web en un directorio `view_web`) sin cambiar la lógica de modelo/controlador.

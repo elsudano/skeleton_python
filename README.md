@@ -49,23 +49,26 @@ Each "screen" of the application (for example, the video uploader) is implemente
 
 ```
 .
-├── main.py                        # Application entry point
-├── requirements.txt                # Project dependencies
-├── skeleton_python.spec            # PyInstaller packaging configuration
-├── thumbnail.jpg                   # Resource used by the Instagram module
-└── src/
-    ├── config.py                   # Centralized paths and configuration (dev vs. binary)
-    ├── model/
-    │   ├── model.py                 # Base Model class (ABC)
-    │   └── models.py                # Concrete models (First/Second/Third)
-    ├── controller/
-    │   ├── controller.py            # Base Controller class (ABC)
-    │   └── controllers.py           # Concrete controllers (First/Second/Third)
-    └── view_app/
-        ├── view.py                  # Base View class (ABC)
-        ├── views.py                  # Concrete views (First/Second/Third)
-        ├── widgets.py                 # Reusable auxiliary widgets
-        └── window.py                  # Main window wrapper
+├── main.py                 # Application entry point
+├── requirements.txt        # Project dependencies
+├── skeleton_python.spec    # PyInstaller packaging configuration
+├── src/
+│   ├── config.py           # Centralized paths and configuration (dev vs. binary)
+│   ├── model/
+│   │   ├── model.py        # Base Model class (ABC)
+│   │   └── models.py       # Concrete models (First/Second/Third)
+│   ├── controller/
+│   │   ├── controller.py   # Base Controller class (ABC)
+│   │   └── controllers.py  # Concrete controllers (First/Second/Third)
+│   └── view_app/
+│       ├── view.py         # Base View class (ABC)
+│       ├── views.py        # Concrete views (First/Second/Third)
+│       ├── widgets.py      # Reusable auxiliary widgets
+│       └── window.py       # Main window wrapper
+└── assets/
+    ├── thumbnail.jpg       # Resource used by the Instagram module
+    ├── icon.png            # Resource used by the Pyinstaller
+    └── icon.ico            # Resource used by the Pyinstaller
 ```
 
 > The project is designed to support other types of interfaces in the future (for example, a web view under a `view_web` directory) without changing the model/controller logic.
