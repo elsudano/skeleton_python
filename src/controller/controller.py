@@ -41,7 +41,7 @@ class Controller(ABC):
     def back(self, event):
         pass
 
-    def change_theme(self, event):
+    def change_theme(self):
         """Estilo de tipo Dark.
 
         Esta función se encarga de formatear todos los componentes para,
