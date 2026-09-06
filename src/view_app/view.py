@@ -4,10 +4,7 @@
 
 A partir de esta clase se crearán todas las vistas que tendrá el programa
 """
-try:
-    from Tkinter import Menu
-except ImportError:
-    from tkinter import Menu
+import tkinter as tk # Tenemos que utilizar tkinter por que ttkbootstrap no tiene los menus
 from abc import ABC, abstractmethod
 
 
@@ -30,7 +27,7 @@ class View(ABC):
         # Esto es para inicializar la Abstract Base Class
         super(View, self).__init__()
         self._window = window
-        self._menu_bar = Menu(self._window.get())
+        self._menu_bar = tk.Menu(self._window.get())
         self._menus = list()
         self._window.get().config(menu=self._menu_bar)
         self._add_menu("File")
@@ -47,6 +44,7 @@ class View(ABC):
             This will be the controller that manage the view and the model that we will use to the application
         """
         self._controller = controller
+        self._add_item_menu("Tools", "Change Theme", self._controller.change_theme)
         self._window.init_ui()
 
     @abstractmethod
@@ -55,7 +53,7 @@ class View(ABC):
 
     def _add_menu(self, name):
         """Añade un menú a la barra de menus"""
-        menu_aux = Menu(self._menu_bar)
+        menu_aux = tk.Menu(self._menu_bar)
         menu_aux.config(title=name)
         # FIXME: arreglar la inclusión de posicionamiento del menú
         # si queremos cambiar para que se pueda añadir un menu en la posición
@@ -67,8 +65,8 @@ class View(ABC):
         """Añade una opción a los menus"""
         for menu in self._menus:
             if menu.cget('title') == parent:
-                # menu.add_command(label=name, command=command)
-                menu.add_command(label=name)
+                menu.add_command(label=name, command=command)
+                # menu.add_command(label=name)
                 # FIXME: arreglar la inclusión de posicionamiento del item del menú
                 # menu.insert_command(0, label=name, command=command)
                 # si queremos cambiar para que se pueda añadir una opción de menu
