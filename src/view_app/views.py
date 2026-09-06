@@ -5,14 +5,9 @@
 Aquí es donde se pondrán los menus de la aplicación junto con los botones,
 necesarios para que funcione la primera vista de la aplicación.
 """
-try:
-    from Tkinter import ttk # type: ignore
-except ImportError:
-    import tkinter as tk
-    from tkinter import ttk
-    from tkinter import filedialog
-from src.view_app.view import View
 
+import ttkbootstrap as ttk
+from src.view_app.view import View
 
 class FirstView(View):
     """Vista Principal del programa."""
@@ -24,36 +19,44 @@ class FirstView(View):
         ventana pues es donde se crean todos los widgets y se colocan,
         en su lugar correspondiente.
         """
+        self._window.set_size(600,350)
         # Creamos el marco
         self._principal_frame = ttk.Frame(self._window.get(), padding="3 3 12 12")
         # El marco está en la posición 0,0 de la ventana en el centro
         self._principal_frame.grid(column=0, row=0, sticky='N'+'S'+'E'+'W')
+        # para decirle a la ventana donde esta el grid
+        self._window.get().columnconfigure(0, weight=1)
+        self._window.get().rowconfigure(0, weight=1)
+        # Las columnas y las filas 0 y 12 son fijas y no se mueven 
+        # todos los widgets se posicionan entre los números 1 y 11
+        # tanto para columnas como para filas
         # cantidad de columnas que tiene el marco
-        self._principal_frame.columnconfigure(0, weight=12)
+        self._principal_frame.columnconfigure(0, weight=1)
+        self._principal_frame.columnconfigure([1,2,3,4,5,6,7,8,9,10,11], weight=1)
+        self._principal_frame.columnconfigure(12, weight=0)
         # cantidad de filas que tiene el marco
-        self._principal_frame.rowconfigure(0, weight=12)
+        self._principal_frame.rowconfigure(0, weight=1)
+        self._principal_frame.rowconfigure([1,2,3,4,5,6,7,8,9,10,11], weight=1)
+        self._principal_frame.rowconfigure(12, weight=0)
         # crea botón dentro de marco
-        self.b_exit = ttk.Button(self._principal_frame, text="Exit")
+        self.b_exit = ttk.Button(self._principal_frame, text="Exit", bootstyle='danger')
         # ponemos en la posición 0,1 y que se expanda a SurEste
         self.b_exit.grid(column=12, row=12, sticky='SE')
         # agregamos el comando del botón
         self.b_exit.bind("<Button>", self._controller.exit_application)
-        self.b_test = ttk.Button(self._principal_frame, text="Test")
-        self.b_test.grid(column=1, row=0, sticky='SE')
-        self.b_test.bind("<Button>", self._controller.test)
         # --------------------------------------------------------------------------------
-        self.b_change_size = ttk.Button(self._principal_frame, text="Change Size")
-        self.b_change_size.grid(column=0, row=0, sticky='NW')
+        self.b_test = ttk.Button(self._principal_frame, text="Test", bootstyle='primary')
+        self.b_test.grid(column=0, row=0, sticky='NW')
+        self.b_test.bind("<Button>", self._controller.test)
+        self.b_change_size = ttk.Button(self._principal_frame, text="Change Size", bootstyle='primary')
+        self.b_change_size.grid(column=2, row=1, sticky='NW')
         self.b_change_size.bind("<Button>", self._controller.change_size)
-        self.b_new_view = ttk.Button(self._principal_frame, text="Designer Route")
-        self.b_new_view.grid(column=0, row=1, sticky='S')
+        self.b_new_view = ttk.Button(self._principal_frame, text="Designer Route", bootstyle='primary')
+        self.b_new_view.grid(column=1, row=2, sticky='NW')
         self.b_new_view.bind("<Button>", self._controller.designer_route)
-        self.b_new_view = ttk.Button(self._principal_frame, text="Video Uploader")
-        self.b_new_view.grid(column=1, row=1, sticky='S')
+        self.b_new_view = ttk.Button(self._principal_frame, text="Video Uploader", bootstyle='primary')
+        self.b_new_view.grid(column=2, row=2, sticky='NW')
         self.b_new_view.bind("<Button>", self._controller.video_uploader)
-        self._add_menu("ViewMenu1")
-        self._add_item_menu("ViewMenu1", "Test", self._controller.menu_item_exit)
-
 
 class SecondView(View):
     """Vista Principal del programa."""
@@ -65,42 +68,48 @@ class SecondView(View):
         ventana pues es donde se crean todos los widgets y se colocan,
         en su lugar correspondiente.
         """
+        self._window.set_size(650,300)
         self._principal_frame = ttk.Frame(self._window.get(), padding="3 3 12 12")
         self._principal_frame.grid(column=0, row=0, sticky='NSEW')
-        self._principal_frame.columnconfigure(0, weight=1)
-        self._principal_frame.rowconfigure(0, weight=1)
-        self.b_back = ttk.Button(self._principal_frame, text="Back")
-        self.b_back.grid(column=0, row=12, sticky='W')
-        self.b_run = ttk.Button(self._principal_frame, text="Design Route")
+        # Las columnas y las filas 0 y 12 son fijas y no se mueven 
+        # todos los widgets se posicionan entre los números 1 y 11
+        # tanto para columnas como para filas
+        self._principal_frame.rowconfigure([1,2,3,4,5,6,7,8,9,10,11], weight=1)
+        self._principal_frame.rowconfigure(0, weight=0)
+        self._principal_frame.rowconfigure(12, weight=0)
+        self._principal_frame.columnconfigure([1,2,3,4,5,6,7,8,9,10,11], weight=1)
+        self._principal_frame.columnconfigure(0, weight=0)
+        self._principal_frame.columnconfigure(12, weight=0)
+        self.b_back = ttk.Button(self._principal_frame, text="Back", bootstyle='warning')
+        self.b_back.grid(column=0, row=12, sticky='SW')
+        self.b_run = ttk.Button(self._principal_frame, text="Design Route", bootstyle='primary')
         self.b_run.grid(column=11, row=12, sticky='E')
-        self.b_exit = ttk.Button(self._principal_frame, text="Exit")
-        self.b_exit.grid(column=12, row=12, sticky='E')
+        self.b_exit = ttk.Button(self._principal_frame, text="Exit", bootstyle='danger')
+        self.b_exit.grid(column=12, row=12, sticky='SE')
         # Titulo de la ventana
         self.title_label = ttk.Label(self._principal_frame, text="🗼 Tokio Subway Designer Route", font=('Arial', 16, 'bold'))
         self.title_label.grid(column=0, row=0, columnspan=12, pady=(0, 20), sticky='W')
         # Titulo del Campo Origen
         self.l_from = ttk.Label(self._principal_frame, text="From:")
-        self.l_from.grid(column=0, row=1, columnspan=6, sticky='EW')
+        self.l_from.grid(column=1, row=1, columnspan=6, sticky='EW')
         # Campo Origen
         self.e_from = ttk.Entry(self._principal_frame, width=50)
-        self.e_from.grid(column=1, row=1, columnspan=12, sticky='EW')
+        self.e_from.grid(column=2, row=1, columnspan=12, sticky='EW')
         # Titulo del Campo Destino
         self.l_to = ttk.Label(self._principal_frame, text="To:")
-        self.l_to.grid(column=0, row=2, sticky='EW')
+        self.l_to.grid(column=1, row=2, sticky='EW')
         # Campo Destino
         self.e_to = ttk.Entry(self._principal_frame, width=50)
-        self.e_to.grid(column=1, row=2, columnspan=12, sticky='EW')
+        self.e_to.grid(column=2, row=2, columnspan=12, sticky='EW')
         # Titulo del Campo Método de Transporte
         self.l_method = ttk.Label(self._principal_frame, text="Method:")
-        self.l_method.grid(column=0, row=3, sticky='EW')
+        self.l_method.grid(column=1, row=3, sticky='EW')
         # Campo Método de Transporte
         self.cb_method = ttk.Combobox(self._principal_frame, values=['driving','walking','bicycling','transit'])
-        self.cb_method.grid(column=1, row=3, columnspan=12, sticky='EW')
+        self.cb_method.grid(column=2, row=3, columnspan=12, sticky='EW')
         self.b_back.bind("<Button>", self._controller.back)
         self.b_run.bind("<Button>", self._controller.get_directions)
         self.b_exit.bind("<Button>", self._controller.exit_application)
-        self._add_menu("ViewMenu2")
-        self._add_item_menu("ViewMenu2", "Exit", self._controller.menu_item_exit)
 
 class ThirdView(View):
     """Vista para subir videos a las plataformas de Youtube y Instagram."""
@@ -112,57 +121,65 @@ class ThirdView(View):
         ventana pues es donde se crean todos los widgets y se colocan,
         en su lugar correspondiente.
         """
+        self._window.set_size(900,550)
         self._principal_frame = ttk.Frame(self._window.get(), padding="3 3 12 12")
         self._principal_frame.grid(column=0, row=0, sticky='NSEW')
-        self._principal_frame.columnconfigure(0, weight=1)
-        self._principal_frame.rowconfigure(0, weight=1)
-        self.b_back = ttk.Button(self._principal_frame, text="Back")
+        # Las columnas y las filas 0 y 12 son fijas y no se mueven 
+        # todos los widgets se posicionan entre los números 1 y 11
+        # tanto para columnas como para filas
+        self._principal_frame.rowconfigure([1,2,3,4,5,6,7,8,9,10,11], weight=1)
+        self._principal_frame.rowconfigure(0, weight=0)
+        self._principal_frame.rowconfigure(12, weight=0)
+        self._principal_frame.columnconfigure([1,2,3,4,5,6,7,8,9,10,11], weight=1)
+        self._principal_frame.columnconfigure(0, weight=0)
+        self._principal_frame.columnconfigure(12, weight=0)
+        self.b_back = ttk.Button(self._principal_frame, text="Back", bootstyle='warning')
         self.b_back.grid(column=0, row=12, sticky='W')
-        self.b_run = ttk.Button(self._principal_frame, text="Upload Video")
+        self.b_run = ttk.Button(self._principal_frame, text="Upload Video", bootstyle='primary')
         self.b_run.grid(column=11, row=12, sticky='E')
-        self.b_exit = ttk.Button(self._principal_frame, text="Exit")
+        self.b_exit = ttk.Button(self._principal_frame, text="Exit", bootstyle='danger')
         self.b_exit.grid(column=12, row=12, sticky='E')
         # Titulo de la ventana
         self.title_label = ttk.Label(self._principal_frame, text="Batch Video Uploader", font=('Arial', 16, 'bold'))
-        self.title_label.grid(column=0, row=0, columnspan=15, pady=(0, 20), sticky='W')
+        self.title_label.grid(column=0, row=0, columnspan=12, pady=(0, 20), sticky='W')
         # Titulo del Campo Ruta
         self.l_path = ttk.Label(self._principal_frame, text="Video Path:")
-        self.l_path.grid(column=0, row=1, columnspan=6, sticky='EW')
+        self.l_path.grid(column=1, row=1, sticky='EW')
         # Campo Ruta
         self.e_path = ttk.Entry(self._principal_frame, width=50)
-        self.e_path.grid(column=1, row=1, columnspan=12, sticky='EW')
+        self.e_path.grid(column=2, row=1, columnspan=10, sticky='EW')
         # Botón para el Path
         self.b_select_file = ttk.Button(self._principal_frame, text="Select File")
-        self.b_select_file.grid(column=12, row=1, columnspan=3, sticky='E')
+        self.b_select_file.grid(column=11, row=1, columnspan=2, sticky='E')
         # Titulo del Campo Título
         self.l_title = ttk.Label(self._principal_frame, text="Title:")
-        self.l_title.grid(column=0, row=2, sticky='EW')
+        self.l_title.grid(column=1, row=2, sticky='EW')
         # Campo Título
         self.e_title = ttk.Entry(self._principal_frame, width=50)
-        self.e_title.grid(column=1, row=2, columnspan=12, sticky='EW')
+        self.e_title.grid(column=2, row=2, columnspan=12, sticky='EW')
         # Título del Campo GeoLocalización
         self.l_geolocation = ttk.Label(self._principal_frame, text="GeoLocation:")
-        self.l_geolocation.grid(column=0, row=3, sticky='EW')
+        self.l_geolocation.grid(column=1, row=3, sticky='EW')
         # Campo GeoLocalización
         self.e_geolocation = ttk.Entry(self._principal_frame, width=50)
-        self.e_geolocation.grid(column=1, row=3, columnspan=12, sticky='EW')
+        self.e_geolocation.grid(column=2, row=3, columnspan=12, sticky='EW')
         # Título del Campo Plataformas
         self.l_platforms = ttk.Label(self._principal_frame,text="Platforms:")
-        self.l_platforms.grid(column=0, row=4, sticky='EW')
+        self.l_platforms.grid(column=1, row=4, sticky='EW')
         # CheckBox de Youtube
         self.cb_youtube = ttk.Checkbutton(self._principal_frame,text="YouTube")
         self.cb_youtube.invoke()
-        self.cb_youtube.grid(column=1, row=4, sticky='EW')
+        self.cb_youtube.grid(column=2, row=4, sticky='EW')
         # CheckBox de Instagram
         self.cb_instagram = ttk.Checkbutton(self._principal_frame,text="Instagram")
         self.cb_instagram.invoke()
-        self.cb_instagram.grid(column=2, row=4, sticky='EW')
+        self.cb_instagram.grid(column=3, row=4, sticky='EW')
         # Titulo del Campo Descripción
         self.l_description = ttk.Label(self._principal_frame, text="Description:")
-        self.l_description.grid(column=0, row=5, sticky='EW')
+        self.l_description.grid(column=1, row=5, sticky='EW')
         # Campo Descripción
-        self.tx_description = tk.Text(self._principal_frame, width=50, height=5)
-        self.tx_description.grid(column=0, row=6, columnspan=13, sticky='EW')
+        self.tx_description = ttk.ScrolledText(self._principal_frame, width=50, height=5)
+        self.tx_description.grid(column=1, row=6, columnspan=13, sticky='EW')
         self.b_back.bind("<Button>", self._controller.back)
         self.b_select_file.bind("<Button>", self._controller._select_file)
         self.b_run.bind("<Button>", self._controller.upload_video)
@@ -178,7 +195,7 @@ class ThirdView(View):
             str: el código introducido, o None si el usuario cancela.
         """
         result = {'valor': None}
-        modal_view = tk.Toplevel(self._window.get())
+        modal_view = ttk.Frame(self._window.get())
         modal_view.title("Código de verificación de Instagram")
         modal_view.geometry("340x160")
         modal_view.grab_set()  # modal: bloquea el resto de la app

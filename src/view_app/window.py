@@ -5,11 +5,9 @@
 Con esto se pretende abstraer la parte de la vista del programa así pues,
 se genera un controlador que se encarga de todas las vistas del programa.
 """
-try:
-    import Tkinter as gui_library
-except ImportError:
-    import tkinter as gui_library
-
+import sys
+import ttkbootstrap as ttk
+from src.config import (ICON_FILE_ICO, ICON_FILE_PNG)
 
 class Window:
     """Clase Ventana.
@@ -34,20 +32,11 @@ class Window:
         height : int
             Indica el tamaño del alto de la ventana.
         """
-        self.__root = gui_library.Tk()
+        self.__root = ttk.Window(title=title,themename="superhero",iconphoto=ICON_FILE_PNG,resizable=(True, True),size=(width, height))
+        self.__root.iconbitmap(ICON_FILE_ICO)
         self.__height = height
         self.__width = width
         self.__title = title
-
-    # def __dark_style(self):
-    #     """Estilo de tipo Dark.
-    #
-    #     Esta función se encarga de formatear todos los componentes para,
-    #     simular un entorno dark, en la aplicación.
-    #     """
-    #     style = ttk.Style()
-    #     style.configure("TFrame", background="black")
-    #     style.configure("TButton", background="gray")
 
     def init_ui(self):
         """Inicialización de la ventana.
@@ -62,6 +51,20 @@ class Window:
         self.__root.geometry('{}x{}+{}+{}'.format(self.__width, self.__height, x, y))
         self.__root.title(self.__title)
         self.__root.minsize(width=self.__width, height=self.__height)
+
+    def get_theme(self):
+        """Esta función devuelve el tema que se esta utilizando actualmente en la aplicación
+
+        Podemos utilizar 'cosmo', 'flatly', 'darkly', 'superhero', 'solar', 'cyborg'
+        """
+        return self.__root.theme_use()
+
+    def set_theme(self, theme):
+        """Esta función establece el tipo de template queremos usar.
+
+        Podemos utilizar 'cosmo', 'flatly', 'darkly', 'superhero', 'solar', 'cyborg' 
+        """
+        self.__root.theme_use(theme)
 
     def get_size(self):
         """Mostrar el tamaño de la ventana.
