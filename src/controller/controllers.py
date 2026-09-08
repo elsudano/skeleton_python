@@ -10,6 +10,7 @@ many classes to control all the behavior of our application.
 import threading
 from tkinter import filedialog
 import ttkbootstrap as ttk
+from ttkbootstrap import constants
 from src.controller.controller import Controller
 from src.model.models import (FirstModel, SecondModel, ThirdModel)
 from src.view_app.views import (FirstView, SecondView, ThirdView)
@@ -110,7 +111,7 @@ class ThirdController(Controller):
         string_path = self._view.e_path.get()
         string_title = self._view.e_title.get()
         string_location = self._view.e_geolocation.get()
-        text_description = self._view.tx_description.get("1.0", ttk.END).strip()
+        text_description = self._view.tx_description.get("1.0", constants.END).strip()
         cb_platforms = []
         if self._view.cb_youtube.instate(['selected']):
             cb_platforms.append("youtube")
@@ -148,10 +149,10 @@ class ThirdController(Controller):
             self._clear_fields()
 
     def _clear_fields(self):
-        self._view.e_path.delete(0, ttk.END)
-        self._view.e_title.delete(0, ttk.END)
-        self._view.e_geolocation.delete(0, ttk.END)
-        self._view.tx_description.delete("1.0", ttk.END)
+        self._view.e_path.delete(0, constants.END)
+        self._view.e_title.delete(0, constants.END)
+        self._view.e_geolocation.delete(0, constants.END)
+        self._view.tx_description.delete("1.0", constants.END)
         # self._view.cb_youtube.invoke()
         # self._view.cb_instagram.invoke()
     

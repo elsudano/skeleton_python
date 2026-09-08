@@ -16,7 +16,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from src.model.model import Model
-from src.config import (CREDENTIALS_DIR,YOUTUBE_CLIENT_SECRET_FILE,YOUTUBE_SESSION_FILE,INSTAGRAM_SESSION_FILE)
+from src.config import (CREDENTIALS_DIR,YOUTUBE_CLIENT_SECRET_FILE,YOUTUBE_SESSION_FILE,INSTAGRAM_SESSION_FILE,THUMBNAIL_FILE)
 
 os.makedirs(CREDENTIALS_DIR, exist_ok=True)
 
@@ -182,7 +182,7 @@ class ThirdModel(Model):
             # Inicializar el cliente de Instagram
             client = self._get_instagram_client()
             # Subir el video
-            result = client.clip_upload(string_path,caption=f"{string_title}\n\n{text_description}",thumbnail=f"thumbnail.jpg",)
+            result = client.clip_upload(string_path,caption=f"{string_title}\n\n{text_description}",thumbnail=THUMBNAIL_FILE,)
             print(f"Instagram subido. ID: {result.id}")
         except instagrapi.exceptions.LoginRequired:
             raise Exception("La sesión de Instagram ha expirado. Verifica tus credenciales.")
