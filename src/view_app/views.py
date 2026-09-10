@@ -19,6 +19,7 @@ class FirstView(View):
         Uploader" buttons on top of the common widgets created by
         `View.__init__`, and binds the shared "Exit" button.
         """
+        self._window.set_title("Multiple App Skeleton")
         self.b_test = ttk.Button(self._principal_frame, text="Test", bootstyle='primary')
         self.b_test.grid(column=1, row=1, sticky='NW')
         self.b_test.bind("<Button>", self._controller.test)
@@ -44,12 +45,13 @@ class SecondView(View):
         `View.__init__`.
         """
         self._window.set_size(650,500)
+        self._window.set_title("Tokio Subway Designer Route")
         self.b_back = ttk.Button(self._principal_frame, text="Back", bootstyle='warning')
         self.b_back.grid(column=0, row=12, sticky='SW')
         self.b_run = ttk.Button(self._principal_frame, text="Design Route", bootstyle='primary')
         self.b_run.grid(column=11, row=12, sticky='E')
         # Titulo de la ventana
-        self.title_label = ttk.Label(self._principal_frame, text="🗼 Tokio Subway Designer Route", font=('Arial', 16, 'bold'))
+        self.title_label = ttk.Label(self._principal_frame, text="Tokio Subway Designer Route", font=('Arial', 16, 'bold'))
         self.title_label.grid(column=0, row=0, columnspan=12, pady=(0, 20), sticky='W')
         # Titulo del Campo Origen
         self.l_from = ttk.Label(self._principal_frame, text="From:")
@@ -84,6 +86,7 @@ class ThirdView(View):
         button on top of the common widgets created by `View.__init__`.
         """
         self._window.set_size(900,700)
+        self._window.set_title("Batch Video Uploader")
         self.b_back = ttk.Button(self._principal_frame, text="Back", bootstyle='warning')
         self.b_back.grid(column=0, row=12, sticky='W')
         self.b_run = ttk.Button(self._principal_frame, text="Upload Video", bootstyle='primary')
