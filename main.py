@@ -13,7 +13,7 @@ from src.view_app.views import FirstView
 
 if __name__ == '__main__':
     # Creamos la Ventana
-    myWindow = Window("Instalación de Aplicación", 600, 350)
+    myWindow = Window("Instalación de Aplicación", 650, 400)
     # Creamos el modelo
     myModel = FirstModel()
     # Creamos la vista principal de la aplicación y le añadimos la ventana y el controlador

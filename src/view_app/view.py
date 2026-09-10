@@ -64,7 +64,6 @@ class View(ABC):
         self._add_menu("Edit")
         self._add_menu("Show")
         self._add_menu("Tools")
-        self._window.set_size(650,400)
         # Creamos el marco
         self._principal_frame = ttk.Frame(self._window.get(), padding="3 3 12 12")
         # El marco está en la posición 0,0 de la ventana en el centro

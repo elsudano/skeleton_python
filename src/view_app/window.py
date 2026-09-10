@@ -124,6 +124,7 @@ class Window:
             The new window title.
         """
         self.__title = t
+        self.init_ui()
 
     def get(self):
         """Return the underlying ttkbootstrap root window.

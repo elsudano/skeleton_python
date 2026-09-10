@@ -19,6 +19,7 @@ class FirstView(View):
         Uploader" buttons on top of the common widgets created by
         `View.__init__`, and binds the shared "Exit" button.
         """
+        self._window.set_size(650,400)
         self._window.set_title("Multiple App Skeleton")
         self.b_test = ttk.Button(self._principal_frame, text="Test", bootstyle='primary')
         self.b_test.grid(column=1, row=1, sticky='NW')
