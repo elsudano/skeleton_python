@@ -21,16 +21,19 @@ class Window:
     __title = None
 
     def __init__(self, title="Información del sistema", width=500, height=500):
-        """Constructor por defecto.
+        """Create the application's main window.
+
+        Builds the underlying ttkbootstrap.Window with the "superhero"
+        theme and the given title/size, and sets its icon.
 
         Parameters
         ----------
-        title : string
-            Este es el título de la ventana.
+        title : str
+            The window title.
         width : int
-            Indica el tamaño del ancho de la ventana.
+            The window's width, in pixels.
         height : int
-            Indica el tamaño del alto de la ventana.
+            The window's height, in pixels.
         """
         self.__root = ttk.Window(title=title,themename="superhero",iconphoto=ICON_FILE_PNG,resizable=(True, True),size=(width, height))
         self.__root.iconbitmap(ICON_FILE_ICO)
@@ -39,12 +42,12 @@ class Window:
         self.__title = title
 
     def init_ui(self):
-        """Inicialización de la ventana.
+        """(Re)apply the window's size, title and position.
 
-        Se utilizan parámetros por defecto para crear la ventana principal un,
-        tamaño predefinido y un nombre de aplicación y un icono por defecto.
-        Como esta función se puede llamar desde cualquier lado para inicializar
-        la ventana se pone pública
+        Centers the window on the screen using the currently stored width
+        and height, and sets its title and minimum size. Called once the
+        view is attached (`View._set_controller`) and again whenever the
+        size changes (`set_size`).
         """
         x = (self.__root.winfo_screenwidth() // 2) - (self.__width // 2)
         y = (self.__root.winfo_screenheight() // 2) - (self.__height // 2)
@@ -53,79 +56,93 @@ class Window:
         self.__root.minsize(width=self.__width, height=self.__height)
 
     def get_theme(self):
-        """Esta función devuelve el tema que se esta utilizando actualmente en la aplicación
+        """Return the name of the ttkbootstrap theme currently in use.
 
-        Podemos utilizar 'cosmo', 'flatly', 'darkly', 'superhero', 'solar', 'cyborg'
+        Returns
+        -------
+        str
+            One of 'cosmo', 'flatly', 'darkly', 'superhero', 'solar',
+            'cyborg', etc.
         """
         return self.__root.theme_use()
 
     def set_theme(self, theme):
-        """Esta función establece el tipo de template queremos usar.
+        """Switch the window to a different ttkbootstrap theme.
 
-        Podemos utilizar 'cosmo', 'flatly', 'darkly', 'superhero', 'solar', 'cyborg' 
+        Parameters
+        ----------
+        theme : str
+            One of 'cosmo', 'flatly', 'darkly', 'superhero', 'solar',
+            'cyborg', etc.
         """
         self.__root.theme_use(theme)
 
     def get_size(self):
-        """Mostrar el tamaño de la ventana.
+        """Return the window's currently stored width and height.
 
-        Parameters
-        ----------
-        width : int
-            Indica el tamaño del ancho de la ventana.
-        height : int
-            Indica el tamaño del alto de la ventana.
+        Returns
+        -------
+        list of int
+            A two-item list [width, height].
         """
         return [self.__width,self.__height]
 
     def set_size(self, width, height):
-        """Asignación del tamaño de la ventana.
+        """Update the window's stored size and re-apply it.
 
         Parameters
         ----------
         width : int
-            Indica el tamaño del ancho de la ventana.
+            The new width, in pixels.
         height : int
-            Indica el tamaño del alto de la ventana.
+            The new height, in pixels.
         """
         self.__width = width
         self.__height = height
         self.init_ui()
 
     def change_state_size(self, state):
-        """Convierte la ventana para que pueda cambiar de tamaño.
+        """Allow or disallow resizing the window.
 
         Parameters
         ----------
-        state : boolean
-            Indica si se puede maximizar o no la ventana.
+        state : bool
+            True to allow resizing in both directions, False to lock the
+            current size.
         """
         self.__root.resizable(width=state, height=state)
 
     def set_title(self, t):
-        """Asigna el título a la ventana.
+        """Store a new window title.
+
+        Note: this only updates the stored title; call `init_ui()` (or
+        `set_size`, which calls it) to actually apply it to the window.
 
         Parameters
         ----------
-        t : string
-            Especifica el título de la ventana.
+        t : str
+            The new window title.
         """
         self.__title = t
 
     def get(self):
-        """Devuelve la root de la ventana."""
+        """Return the underlying ttkbootstrap root window.
+
+        Returns
+        -------
+        ttkbootstrap.Window
+            The root window that every widget in the app is built on.
+        """
         return self.__root
 
     def start(self):
-        """Poner en funcionamiento la vista.
+        """Start the Tkinter main event loop.
 
-        Se utiliza para poder poner el loop principal de la aplicación andando.
+        Blocks until the window is closed; this is normally the last call
+        made in main.py.
         """
         self.__root.mainloop()
 
     def stop(self):
-        """Detiene la aplicación.
-
-        Se utiliza para detener la aplicación.
-        """
+        """Stop the Tkinter main event loop, closing the window."""
         self.__root.quit()

@@ -13,40 +13,14 @@ class FirstView(View):
     """Vista Principal del programa."""
 
     def _init_view(self):
-        """Método de creación de vista.
+        """Build the home screen's buttons.
 
-        En este método es donde realmente se genera la vista de la,
-        ventana pues es donde se crean todos los widgets y se colocan,
-        en su lugar correspondiente.
+        Adds the "Test", "Change Size", "Designer Route" and "Video
+        Uploader" buttons on top of the common widgets created by
+        `View.__init__`, and binds the shared "Exit" button.
         """
-        self._window.set_size(600,350)
-        # Creamos el marco
-        self._principal_frame = ttk.Frame(self._window.get(), padding="3 3 12 12")
-        # El marco está en la posición 0,0 de la ventana en el centro
-        self._principal_frame.grid(column=0, row=0, sticky='N'+'S'+'E'+'W')
-        # para decirle a la ventana donde esta el grid
-        self._window.get().columnconfigure(0, weight=1)
-        self._window.get().rowconfigure(0, weight=1)
-        # Las columnas y las filas 0 y 12 son fijas y no se mueven 
-        # todos los widgets se posicionan entre los números 1 y 11
-        # tanto para columnas como para filas
-        # cantidad de columnas que tiene el marco
-        self._principal_frame.columnconfigure(0, weight=1)
-        self._principal_frame.columnconfigure([1,2,3,4,5,6,7,8,9,10,11], weight=1)
-        self._principal_frame.columnconfigure(12, weight=0)
-        # cantidad de filas que tiene el marco
-        self._principal_frame.rowconfigure(0, weight=1)
-        self._principal_frame.rowconfigure([1,2,3,4,5,6,7,8,9,10,11], weight=1)
-        self._principal_frame.rowconfigure(12, weight=0)
-        # crea botón dentro de marco
-        self.b_exit = ttk.Button(self._principal_frame, text="Exit", bootstyle='danger')
-        # ponemos en la posición 0,1 y que se expanda a SurEste
-        self.b_exit.grid(column=12, row=12, sticky='SE')
-        # agregamos el comando del botón
-        self.b_exit.bind("<Button>", self._controller.exit_application)
-        # --------------------------------------------------------------------------------
         self.b_test = ttk.Button(self._principal_frame, text="Test", bootstyle='primary')
-        self.b_test.grid(column=0, row=0, sticky='NW')
+        self.b_test.grid(column=1, row=1, sticky='NW')
         self.b_test.bind("<Button>", self._controller.test)
         self.b_change_size = ttk.Button(self._principal_frame, text="Change Size", bootstyle='primary')
         self.b_change_size.grid(column=2, row=1, sticky='NW')
@@ -57,35 +31,23 @@ class FirstView(View):
         self.b_new_view = ttk.Button(self._principal_frame, text="Video Uploader", bootstyle='primary')
         self.b_new_view.grid(column=2, row=2, sticky='NW')
         self.b_new_view.bind("<Button>", self._controller.video_uploader)
+        self.b_exit.bind("<Button>", self._controller.exit_application) # este botón es genérico esta en view
 
 class SecondView(View):
     """Vista Principal del programa."""
 
     def _init_view(self):
-        """Método de creación de vista.
+        """Build the Tokyo subway route designer screen.
 
-        En este método es donde realmente se genera la vista de la,
-        ventana pues es donde se crean todos los widgets y se colocan,
-        en su lugar correspondiente.
+        Adds the title, the "From"/"To"/"Method" fields, and the "Design
+        Route" button on top of the common widgets created by
+        `View.__init__`.
         """
-        self._window.set_size(650,300)
-        self._principal_frame = ttk.Frame(self._window.get(), padding="3 3 12 12")
-        self._principal_frame.grid(column=0, row=0, sticky='NSEW')
-        # Las columnas y las filas 0 y 12 son fijas y no se mueven 
-        # todos los widgets se posicionan entre los números 1 y 11
-        # tanto para columnas como para filas
-        self._principal_frame.rowconfigure([1,2,3,4,5,6,7,8,9,10,11], weight=1)
-        self._principal_frame.rowconfigure(0, weight=0)
-        self._principal_frame.rowconfigure(12, weight=0)
-        self._principal_frame.columnconfigure([1,2,3,4,5,6,7,8,9,10,11], weight=1)
-        self._principal_frame.columnconfigure(0, weight=0)
-        self._principal_frame.columnconfigure(12, weight=0)
+        self._window.set_size(650,500)
         self.b_back = ttk.Button(self._principal_frame, text="Back", bootstyle='warning')
         self.b_back.grid(column=0, row=12, sticky='SW')
         self.b_run = ttk.Button(self._principal_frame, text="Design Route", bootstyle='primary')
         self.b_run.grid(column=11, row=12, sticky='E')
-        self.b_exit = ttk.Button(self._principal_frame, text="Exit", bootstyle='danger')
-        self.b_exit.grid(column=12, row=12, sticky='SE')
         # Titulo de la ventana
         self.title_label = ttk.Label(self._principal_frame, text="🗼 Tokio Subway Designer Route", font=('Arial', 16, 'bold'))
         self.title_label.grid(column=0, row=0, columnspan=12, pady=(0, 20), sticky='W')
@@ -109,36 +71,23 @@ class SecondView(View):
         self.cb_method.grid(column=2, row=3, columnspan=12, sticky='EW')
         self.b_back.bind("<Button>", self._controller.back)
         self.b_run.bind("<Button>", self._controller.get_directions)
-        self.b_exit.bind("<Button>", self._controller.exit_application)
+        self.b_exit.bind("<Button>", self._controller.exit_application) # este botón es genérico esta en view
 
 class ThirdView(View):
     """Vista para subir videos a las plataformas de Youtube y Instagram."""
 
     def _init_view(self):
-        """Método de creación de vista.
+        """Build the batch video uploader screen.
 
-        En este método es donde realmente se genera la vista de la,
-        ventana pues es donde se crean todos los widgets y se colocan,
-        en su lugar correspondiente.
+        Adds the title, the video path/title/geolocation/description
+        fields, the YouTube/Instagram checkboxes, and the "Upload Video"
+        button on top of the common widgets created by `View.__init__`.
         """
-        self._window.set_size(900,550)
-        self._principal_frame = ttk.Frame(self._window.get(), padding="3 3 12 12")
-        self._principal_frame.grid(column=0, row=0, sticky='NSEW')
-        # Las columnas y las filas 0 y 12 son fijas y no se mueven 
-        # todos los widgets se posicionan entre los números 1 y 11
-        # tanto para columnas como para filas
-        self._principal_frame.rowconfigure([1,2,3,4,5,6,7,8,9,10,11], weight=1)
-        self._principal_frame.rowconfigure(0, weight=0)
-        self._principal_frame.rowconfigure(12, weight=0)
-        self._principal_frame.columnconfigure([1,2,3,4,5,6,7,8,9,10,11], weight=1)
-        self._principal_frame.columnconfigure(0, weight=0)
-        self._principal_frame.columnconfigure(12, weight=0)
+        self._window.set_size(900,700)
         self.b_back = ttk.Button(self._principal_frame, text="Back", bootstyle='warning')
         self.b_back.grid(column=0, row=12, sticky='W')
         self.b_run = ttk.Button(self._principal_frame, text="Upload Video", bootstyle='primary')
         self.b_run.grid(column=11, row=12, sticky='E')
-        self.b_exit = ttk.Button(self._principal_frame, text="Exit", bootstyle='danger')
-        self.b_exit.grid(column=12, row=12, sticky='E')
         # Titulo de la ventana
         self.title_label = ttk.Label(self._principal_frame, text="Batch Video Uploader", font=('Arial', 16, 'bold'))
         self.title_label.grid(column=0, row=0, columnspan=12, pady=(0, 20), sticky='W')
@@ -183,16 +132,18 @@ class ThirdView(View):
         self.b_back.bind("<Button>", self._controller.back)
         self.b_select_file.bind("<Button>", self._controller._select_file)
         self.b_run.bind("<Button>", self._controller.upload_video)
-        self.b_exit.bind("<Button>", self._controller.exit_application)
+        self.b_exit.bind("<Button>", self._controller.exit_application) # este botón es genérico esta en view
 
     def show_instagram_2fa_dialog(self):
-        """
-        Crea y muestra una ventana modal pidiendo el código de
-        verificación (2FA) de Instagram. Bloquea hasta que el usuario
-        confirma o cancela.
- 
-        Returns:
-            str: el código introducido, o None si el usuario cancela.
+        """Show a modal dialog asking for the Instagram 2FA verification code.
+
+        Blocks (via `wait_window()`) until the user confirms or cancels the
+        dialog.
+
+        Returns
+        -------
+        str or None
+            The code entered by the user, or None if they cancelled.
         """
         result = {'valor': None}
         modal_view = ttk.Frame(self._window.get())
