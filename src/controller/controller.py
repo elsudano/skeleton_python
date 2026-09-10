@@ -174,6 +174,14 @@ class Controller(ABC):
         """
         if self._window.get_theme() == "superhero":
             self._window.set_theme("darkly")
+        elif self._window.get_theme() == "darkly":
+            self._window.set_theme("cosmo")
+        elif self._window.get_theme() == "cosmo":
+            self._window.set_theme("flatly")
+        elif self._window.get_theme() == "flatly":
+            self._window.set_theme("solar")
+        elif self._window.get_theme() == "solar":
+            self._window.set_theme("cyborg")
         else:
             self._window.set_theme("superhero")
 
