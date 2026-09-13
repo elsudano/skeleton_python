@@ -215,8 +215,12 @@ class ThirdModel(Model):
                 login_via_session = True
                 self._log("Instagram: sesión reutilizada (sin pedir 2FA).")
             except Exception as e:
-                self._log(f"Instagram: la sesión guardada ya no es válida ({e}). Se requiere login completo.")
-                login_via_session = False
+                if "qe/expose" in str(e):
+                    login_via_session = True
+                    self._log("Instagram: sesión reutilizada (se ignora un aviso interno de Instagram: qe/expose no disponible).")
+                else:
+                    self._log(f"Instagram: la sesión guardada ya no es válida ({e}). Se requiere login completo.")
+                    login_via_session = False
         if not login_via_session:
             client = instagrapi.Client()
             try:
@@ -224,7 +228,9 @@ class ThirdModel(Model):
             except instagrapi.exceptions.TwoFactorRequired:
                 self._login_con_2fa_instagram(client, username, password)
             except Exception as e:
-                if "two-factor" in str(e).lower() or "2fa" in str(e).lower():
+                if "qe/expose" in str(e):
+                    self._log("Instagram: se ignora un aviso interno de Instagram (qe/expose no disponible); el login se da por válido.")
+                elif "two-factor" in str(e).lower() or "2fa" in str(e).lower():
                     self._login_con_2fa_instagram(client, username, password)
                 else:
                     raise
@@ -305,7 +311,9 @@ class ThirdModel(Model):
         except instagrapi.exceptions.LoginRequired:
             raise Exception("La sesión de Instagram ha expirado. Verifica tus credenciales.")
         except instagrapi.exceptions.ClientError as e:
-            if "media is too large" in str(e).lower():
+            if "qe/expose" in str(e):
+                self._log("Instagram: subida completada (se ignora un aviso interno de Instagram: qe/expose no disponible).")
+            elif "media is too large" in str(e).lower():
                 raise Exception("El archivo es demasiado grande para Instagram (máx. 100MB).")
             elif "unsupported media" in str(e).lower():
                 raise Exception("Formato de video no soportado por Instagram.")
