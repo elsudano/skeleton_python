@@ -149,26 +149,9 @@ class ThirdView(View):
         str or None
             The code entered by the user, or None if they cancelled.
         """
-        result = {'valor': None}
-        modal_view = ttk.Frame(self._window.get())
-        modal_view.title("Código de verificación de Instagram")
-        modal_view.geometry("340x160")
-        modal_view.grab_set()  # modal: bloquea el resto de la app
-        modal_view.resizable(False, False)
-        ttk.Label(modal_view,text="Instagram requiere el código de verificación (2FA).\nMíralo en tu app de autenticación:",wraplength=300,justify='left',).pack(padx=10, pady=(10, 5), anchor='w')
-        modal_input = ttk.Entry(modal_view, width=20)
-        modal_input.pack(padx=10, pady=5)
-        modal_input.focus_set()
-        def confirmar(event=None):
-            result['valor'] = modal_input.get().strip()
-            modal_view.destroy()
-        def cancelar():
-            result['valor'] = None
-            modal_view.destroy()
-        modal_input.bind("<Return>", confirmar)  # Enter también confirma
-        modal_bt_frame = ttk.Frame(modal_view)
-        modal_bt_frame.pack(pady=10)
-        ttk.Button(modal_bt_frame, text="Confirmar", command=confirmar).pack(side='left', padx=5)
-        ttk.Button(modal_bt_frame, text="Cancelar", command=cancelar).pack(side='left', padx=5)
-        modal_view.wait_window()  # bloquea aquí hasta que se cierre la ventana
-        return result['valor']
+        code = ttk.Querybox.get_string(
+            prompt="Instagram requiere el código de verificación (2FA).\nMíralo en tu app de autenticación:",
+            title="Verificación 2FA",
+            parent=self._window.get()
+        )
+        return code.strip() if code else None
