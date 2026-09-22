@@ -5,7 +5,6 @@
 Con esto se pretende abstraer la parte de la vista del programa así pues,
 se genera un controlador que se encarga de todas las vistas del programa.
 """
-import sys
 import ttkbootstrap as ttk
 from src.config import (ICON_FILE_ICO, ICON_FILE_PNG)
 
