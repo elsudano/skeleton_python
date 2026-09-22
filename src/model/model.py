@@ -23,15 +23,6 @@ class Model(ABC):
         it loads it with python-dotenv so credentials become available via
         `os.getenv`.
         """
-        if not os.path.exists(ENV_FILE):
-            self._log("ADVERTENCIA: No se encontró el archivo .env")
-            self._log(f"Crea un archivo {ENV_FILE} con tus credenciales.")
-            self._log("Ejemplo de contenido:")
-            self._log("YOUTUBE_CLIENT_SECRET_FILE=.credentials/client_secrets.json")
-            self._log("GMAPS_API_KEY=api_key")
-            self._log("INSTAGRAM_USERNAME=usuario")
-            self._log("INSTAGRAM_PASSWORD=password")
-            return
         load_dotenv(ENV_FILE)
 
     @property

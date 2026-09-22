@@ -5,8 +5,9 @@
 Con esto se pretende abstraer la parte de la vista del programa así pues,
 se genera un controlador que se encarga de todas las vistas del programa.
 """
+import sys
 import ttkbootstrap as ttk
-from src.config import (ICON_FILE_PNG)
+from src.config import (ICON_FILE_ICO, ICON_FILE_PNG)
 
 class Window:
     """Clase Ventana.
@@ -36,8 +37,8 @@ class Window:
             The window's height, in pixels.
         """
         self.__root = ttk.Window(title=title,themename="superhero",iconphoto=ICON_FILE_PNG,resizable=(True, True),size=(width, height))
-        self.__icon = ttk.PhotoImage(file=ICON_FILE_PNG)
-        self.__root.iconphoto(True, self.__icon)
+        if sys.platform == "win32":
+            self.__root.iconbitmap(ICON_FILE_ICO)
         self.__height = height
         self.__width = width
         self.__title = title
